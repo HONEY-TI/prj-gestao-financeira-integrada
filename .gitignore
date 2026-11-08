@@ -1,0 +1,217 @@
+# =========================================================
+# 🔐 SEGREDOS E CREDENCIAIS (NUNCA VERSIONAR)
+# =========================================================
+.env
+.env.*
+!.env.example
+!.env.template
+*.env.local
+secrets.json
+appsettings.Local.json
+appsettings.*.local.json
+appsettings.Secrets.json
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+*.cer
+*.snk
+*.publishsettings
+*.pubxml
+*.pubxml.user
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.kdbx
+credentials.json
+service-account*.json
+firebase-adminsdk*.json
+.aws/
+.azure/
+.secrets/
+.user-secrets/
+
+# =========================================================
+# 📝 LOGS
+# =========================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+testem.log
+libpeerconnection.log
+
+# =========================================================
+# 🟢 NODE / ANGULAR
+# =========================================================
+node_modules/
+/dist/
+/dist-ssr/
+/tmp/
+/out-tsc/
+/bazel-out/
+/coverage/
+/.angular/
+.angular/
+.nx/
+.cache/
+.sass-cache/
+.eslintcache
+.stylelintcache
+.parcel-cache/
+.turbo/
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/install-state.gz
+.pnp.*
+*.tsbuildinfo
+*.tgz
+*.local
+connect.lock
+typings/
+storybook-static/
+
+# Testes de front-end (Cypress / Playwright / Karma)
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# =========================================================
+# 🟣 .NET / C#
+# =========================================================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+publish/
+PublishScripts/
+artifacts/
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.rsuser
+*.ntvs*
+*.njsproj
+*.sw?
+launchSettings.local.json
+project.lock.json
+project.fragment.lock.json
+artifacts.json
+*.nupkg
+*.snupkg
+.nuget/
+!.nuget/NuGet.config
+packages/
+*.nuget.props
+*.nuget.targets
+.dotnet/
+.config/dotnet-tools-cache/
+**/core.*
+**/core
+**/core.*
+**/*.core
+**/*.dmp
+# Testes e cobertura (.NET)
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+*.cover
+.coverage
+*.received.*
+BenchmarkDotNet.Artifacts/
+
+# Banco de dados local
+*.mdf
+*.ldf
+*.ndf
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+App_Data/*.db
+
+# Arquivos gerados / caches de ferramentas
+*.pidb
+*.svclog
+*.scc
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.ionide/
+.fake/
+.cr/personal
+.axoCover/
+.mfractor/
+
+# =========================================================
+# 💻 EDITORES E IDEs
+# =========================================================
+.idea/
+*.iml
+*.ipr
+*.iws
+.fleet/
+.history/
+*.code-workspace
+*~
+*.swp
+*.swo
+
+# =========================================================
+# 🖥️ SISTEMA OPERACIONAL / WSL
+# =========================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*:Zone.Identifier
+*.lnk
+
+# =========================================================
+# 🐳 DOCKER (arquivos locais)
+# =========================================================
+docker-compose.override.yml
+docker-compose.local.yml
+*.tar
+*.dump
+*.bak
+
+# =========================================================
+# 📦 TEMPORÁRIOS E BACKUPS
+# =========================================================
+*.tmp
+*.temp
+*.orig
+*.rej
+*.bak
+.tmp/

@@ -1,0 +1,81 @@
+:root {
+  color-scheme: light;
+  --color-page: #dfe8f2;
+  --color-surface: #fbfdff;
+  --color-surface-strong: #edf3f9;
+  --color-ink: #111827;
+  --color-muted: #52637a;
+  --color-border: #b7c7d9;
+  --color-accent: #155fc0;
+  --color-accent-strong: #0c438b;
+  --color-accent-soft: #cfe3ff;
+  --color-success: #0f765d;
+  --shadow-panel: 0 14px 34px rgba(24, 43, 67, 0.14);
+  --feature-gap: 0.65rem;
+  --feature-gap-tight: 0.45rem;
+  --feature-page-padding: clamp(0.4rem, 0.7vw, 0.75rem);
+  --feature-panel-padding: clamp(0.45rem, 0.85vw, 0.75rem);
+  --feature-panel-padding-bottom: 0.45rem;
+  --feature-chip-padding: clamp(0.16rem, 0.35vw, 0.25rem) clamp(0.38rem, 0.65vw, 0.55rem);
+  --feature-chip-min-height: clamp(1.25rem, 2.7dvh, 1.75rem);
+  --feature-markdown-block-margin: 0 0 0.55rem;
+  --feature-markdown-heading-margin: 0.45rem 0 0.25rem;
+  --feature-line-height: 1.45;
+  --font-size-body: clamp(0.78rem, 0.72rem + 0.28vw, 1rem);
+  --font-size-eyebrow: clamp(0.68rem, 0.61rem + 0.22vw, 0.8rem);
+  --font-size-compact-title: clamp(0.95rem, 0.76rem + 0.78vw, 1.25rem);
+  --font-size-heading-1: clamp(1.55rem, 1.05rem + 4vw, 4.75rem);
+  --font-size-heading-2: clamp(0.9rem, 0.82rem + 0.28vw, 1rem);
+  --font-size-summary: clamp(0.88rem, 0.78rem + 0.55vw, 1.15rem);
+  --font-size-panel-title: clamp(0.88rem, 0.78rem + 0.35vw, 1rem);
+  --font-size-card-value: clamp(1.45rem, 1.1rem + 2.1vw, 2.25rem);
+  --font-size-chip: clamp(0.62rem, 0.58rem + 0.18vw, 0.78rem);
+  --font-size-small: clamp(0.64rem, 0.59rem + 0.18vw, 0.78rem);
+  --metric-card-min-height-default: clamp(4.25rem, 8dvh, 6rem);
+  --github-metric-grid-columns: repeat(auto-fit, minmax(clamp(6.75rem, 18vw, 10rem), 1fr));
+  --github-metric-card-min-height: var(--metric-card-min-height-default);
+  --github-metric-value-size: var(--font-size-card-value);
+  --repository-list-column-width: clamp(14rem, 28vw, 20rem);
+  --app-viewport-height: 100dvh;
+  --app-main-overflow-x: hidden;
+  --app-main-overflow-y: hidden;
+  --feature-content-overflow-x: auto;
+  --feature-content-overflow-y: auto;
+  --app-compact-footer-max-height: min(28dvh, 9rem);
+  font-size: var(--font-size-body);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.dark-mode {
+  color-scheme: dark;
+  --color-page: #10141b;
+  --color-surface: #171d26;
+  --color-surface-strong: #202838;
+  --color-ink: #edf3fb;
+  --color-muted: #a7b4c8;
+  --color-border: #2c3748;
+  --color-accent: #5aa7ff;
+  --color-accent-strong: #9bcaff;
+  --color-accent-soft: #173352;
+  --color-success: #60c5a8;
+  --shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.24);
+}
+
+$primary-color: #0d6efd;          // Azul do botão/textos
+$secondary-color: #f5f5f5;
+$header-color: lightcyan;          // Cor do título
+$footer-opacity: 0.5;              // Opacidade do footer
+$scroll-thumb-color: gray;         // Cor do thumb do scroll
+$scroll-thumb-border: 0.1rem solid gray; // Borda do thumb
+$scroll-thumb-radius: 0.4rem;      // Raio do thumb
+$text-color: black;                // Cor padrão do texto
+$h2-color: white;                  // Cor padrão dos h2
+
+$height-full: 100%;                // Altura completa
+$height-header: 10vh;              // Altura do header
+$height-body: 80vh;                // Altura da área principal
+$max-width-body: 98vw;             // Largura máxima da área principal
+$max-height-body: 78vh;            // Altura máxima da área principal
+$padding-barra-ferramenta: 1vh;    // Padding da barra de ferramentas
+$margin-barra-ferramenta: 1vh;     // Margin da barra de ferramentas
+$scrollbar-width: 0.2rem;          // Largura da scrollbar
