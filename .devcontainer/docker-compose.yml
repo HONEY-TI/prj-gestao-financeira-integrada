@@ -1,28 +1,30 @@
 #ssh -T github-alexfaria # ssh -T gitlab-alexfaria
 services:
-  dotnet-devcontainer:
-    container_name: dotnet-devcontainer
-    image: dotnet-devcontainer:latest
+  prj-gestao-integrada:
+    container_name: prj-gestao-integrada
+    image: prj-gestao-integrada:latest
     tty: true
     stdin_open: true    
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       "args": { "USERNAME": "ubuntu", "ENABLE_SWITCH_USER", "true" }
+    secrets:
+      - env      
+#    env_file:
+#      - .env
     environment:
       NODE_OPTIONS: "--max-old-space-size=4096"
       GITHUB_TOKEN: ${GITHUB_TOKEN:?GITHUB_TOKEN não definido no .env}
       XAUTHORITY: /tmp/.xauth-devc
-    env_file:
-      - .env
     volumes:
-      - ../:/workspace:rw
-      - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:rw
-      - dotnet-node-modules:/workspace/frontend/node_modules:rw 
+      - ../:/workspace:cached
+      - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:cached
+      - dotnet-node-modules:/workspace/frontend/node_modules:cached 
     ports:
-      - 7309:7309
-      - 5488:5488
       - 17015:17015
+      - 7309:7309
+      - 5488:5488      
       - 15183:15183
       - 46233:46233
       - 41555:41555
@@ -37,6 +39,7 @@ services:
     command: sleep infinity
     networks:
       - dotnet-network
+      - redis-network
     logging:
       driver: json-file
       options:
@@ -51,6 +54,10 @@ services:
           memory: 2G
           cpus: '1'        
 
+secrets:
+  env:
+    file: .env
+    
 volumes:
   vscode-extensions-shared:
     external: true
@@ -59,4 +66,6 @@ volumes:
 
 networks:
   dotnet-network:
+    external: true
+  redis-network:
     external: true
