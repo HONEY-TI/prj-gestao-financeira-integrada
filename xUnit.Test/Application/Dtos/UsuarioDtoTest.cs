@@ -1,4 +1,5 @@
 ﻿using Domain.Core.ValueObject;
+using Application.Dtos;
 
 namespace xUnit.Test.Application.Dtos;
 public sealed class UsuarioDtoTest
