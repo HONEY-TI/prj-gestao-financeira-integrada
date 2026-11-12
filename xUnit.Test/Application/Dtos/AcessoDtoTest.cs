@@ -1,4 +1,6 @@
-﻿namespace xUnit.Test.Application.Dtos;
+﻿using Application.Dtos;
+
+namespace xUnit.Test.Application.Dtos;
 public sealed class AcessoDtoTest
 {
 
