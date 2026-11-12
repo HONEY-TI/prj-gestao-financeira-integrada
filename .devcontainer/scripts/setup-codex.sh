@@ -352,29 +352,6 @@ PY
 }
 
 # ==========================================================
-# Shell do usuário
-# ==========================================================
-
-detect_user_shell() {
-    local candidate
-
-    # 1) shell cadastrado no passwd; 2) $SHELL; 3) zsh; 4) bash; 5) sh
-    for candidate in \
-        "$(getent passwd "$CURRENT_USER" | cut -d: -f7 || true)" \
-        "${SHELL:-}" \
-        "$(command -v zsh || true)" \
-        "$(command -v bash || true)" \
-        "$(command -v sh || true)"; do
-        if [[ -n "$candidate" && -x "$candidate" ]]; then
-            printf '%s\n' "$candidate"
-            return 0
-        fi
-    done
-
-    die 127 "nenhum shell encontrado"
-}
-
-# ==========================================================
 # Main
 # ==========================================================
 
