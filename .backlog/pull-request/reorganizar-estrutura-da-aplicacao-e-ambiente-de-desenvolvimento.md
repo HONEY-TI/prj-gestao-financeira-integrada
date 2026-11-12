@@ -22,5 +22,14 @@ desenvolvimento para os projetos `AppHost` e `Server`.
 
 ## Validação
 
-> A lista final de validações e commits será preenchida após a análise e o
-> processamento dos diffs.
+- 110 arquivos versionados alterados.
+- 644 linhas adicionadas e 632 removidas.
+- 142 commits na branch desde `develop`, incluindo o commit inicial da PR.
+- Commits de conteúdo organizados de forma granular, por arquivo, com referência
+  `Refs: [PR](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/pull/1)`.
+- Artefatos locais ignorados mantidos fora da PR.
+
+## Estado
+
+A PR permanece aberta e em modo draft para revisão; não foi feito merge nem
+fechamento da feature.
