@@ -1,6 +1,5 @@
-﻿using Application.CommonDependenceInject;
-using Application.Dtos.Profile;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Dtos.Profile;
+using Application.CommonDependenceInject;
 
 namespace xUnit.Test.CommonDependenceInject;
 public class AutoMapperInjectDependenceTest
@@ -12,7 +11,7 @@ public class AutoMapperInjectDependenceTest
         var services = new ServiceCollection();
 
         // Act
-        services.AddAutoMapper();
+        services.AddApplicationAutoMapper();
 
         // Assert
         Assert.NotNull(services?.Any(descriptor => descriptor.ServiceType == typeof(AcessoProfile)));
