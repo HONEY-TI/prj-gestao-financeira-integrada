@@ -1,6 +1,7 @@
 ﻿using Repository.Mapping.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Repository.Mapping;
 
 namespace xUnit.Test.Repository.Mapping;
 public sealed class AcessoMapTest
