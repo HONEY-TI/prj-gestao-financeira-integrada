@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using MediatR;
-using System.Linq.Expressions;
-using Repository.Persistency.Generic;
+﻿using Application.Dtos;
 using Application.Implementations;
-using Application.Dtos;
+using AutoMapper;
+using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
+using Repository.Persistency.Generic;
 using Repository.UnitOfWork.Abstractions;
+using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Implementations;
@@ -25,7 +26,7 @@ public sealed class CategoriaBusinessImplTest
         _repositorioMock = Usings.MockRepositorio(_categorias);
         _unitOfWorkMock = new Mock<IUnitOfWork<Categoria>>(MockBehavior.Default);
         _mediator = new Mock<IMediator>(MockBehavior.Default);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }, NullLoggerFactory.Instance));
         _categoriaBusiness = new CategoriaBusinessImpl<CategoriaDto>(_mediator.Object, _mapper, _unitOfWorkMock.Object, _repositorioMock.Object);
     }
 
