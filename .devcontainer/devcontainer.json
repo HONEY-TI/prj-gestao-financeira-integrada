@@ -1,25 +1,24 @@
 {
-  "name": "dotnet-devcontainer",
+  "name": "prj-gestao-integrada",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "dockerComposeFile": [
-    "docker-compose.yml"
-  ],
-  "service": "dotnet-devcontainer",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "prj-gestao-integrada",
   "workspaceFolder": "/workspace",
   "remoteUser": "ubuntu",
   "updateRemoteUserUID": true,
   "overrideCommand": false,
-  "initializeCommand": "f=$(ls -t \"${XDG_RUNTIME_DIR}\"/.mutter-Xwaylandauth.* 2>/dev/null | head -n1); if [ -n \"$f\" ]; then cp \"$f\" .devcontainer/.xauth-devc; else : > .xauth-devc; fi",
-  "postCreateCommand": "bash setup-codex.sh && sudo dotnet workload update",
-  //"postStartCommand": "sudo post-start.sh && sudo start-ssh.sh",
+  "initializeCommand": "f=$(ls -t \"${XDG_RUNTIME_DIR}\"/.mutter-Xwaylandauth.* 2>/dev/null | head -n1); rm -rf .devcontainer/.xauth-devc; if [ -n \"$f\" ]; then cp \"$f\" .devcontainer/.xauth-devc; else : > .devcontainer/.xauth-devc; fi",
+  "postCreateCommand": "bash setup-codex.sh ",
+  "postStartCommand": "aspire certs trust",
+  //"updateContentCommand": "setup-dev-certs.sh",
   "waitFor": "postCreateCommand",
-  //"postStartCommand": "open-user-shell.sh",
   "containerEnv": {
     "IN_DEVCONTAINER": "true",
-    "DISPLAY": "${localEnv:DISPLAY}",
-    "XAUTHORITY": "/tmp/.xauth-devc"
+    "DISPLAY": "${localEnv:DISPLAY::0}",
+    "XAUTHORITY": "/tmp/.xauth-devc",
+    "VSCODE_IPC_HOOK_CLI": "${localEnv:VSCODE_IPC_HOOK_CLI}"
   },
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
@@ -27,22 +26,12 @@
     "type=volume,target=/home/ubuntu/.vscode-server",
     "source=${localEnv:HOME}/.ssh,target=/home/ubuntu/.ssh,type=bind"
   ],
-  "forwardPorts": [
-    17015,
-    15183,
-    7309,
-    5488,
-    46233,
-    41555,
-    35923
-  ],
-  
+  "forwardPorts": [17015, 7309, 15183, 5488, 46233, 41555, 35923],
   "customizations": {
     "vscode": {
       "dev.containers.executeInWSL": true,
       "dev.containers.executeInWSLDistro": "Ubuntu",
       "extensions": [
-
         "ms-dotnettools.csdevkit",
         "Angular.ng-template",
         "openai.chatgpt@26.810.52044",
