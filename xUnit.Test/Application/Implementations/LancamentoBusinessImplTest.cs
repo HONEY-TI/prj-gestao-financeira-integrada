@@ -1,8 +1,9 @@
-﻿using AutoMapper;
-using Repository.Persistency.Abstractions;
-using Application.Implementations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
+using Application.Implementations;
+using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
+using Repository.Persistency.Abstractions;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Implementations;
@@ -15,7 +16,7 @@ public sealed class LancamentoBusinessImplTest
     public LancamentoBusinessImplTest()
     {
         _repositorioMock = new Mock<ILancamentoRepositorio>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<LancamentoProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<LancamentoProfile>(); }, NullLoggerFactory.Instance));
         _lancamentoBusiness = new LancamentoBusinessImpl<LancamentoDto>(_mapper, _repositorioMock.Object);
     }
 
