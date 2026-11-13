@@ -22,18 +22,24 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 | --- | --- |
 | 🌿 Branch de origem | `feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento` |
 | 🎯 Branch de destino | `develop` |
-| 📝 Total de commits | 143 |
-| 📁 Arquivos alterados | 110 |
-| ➕ Linhas adicionadas | 653 |
-| ➖ Linhas removidas | 632 |
+| 📝 Total de commits | 165 |
+| 📁 Arquivos alterados | 120 |
+| ➕ Linhas adicionadas | 13369 |
+| ➖ Linhas removidas | 13365 |
 
 ---
 
 ## 📦 Repositórios/branches atualizados
 
 - **[prj-gestao-financeira-integrada](https://github.com/HONEY-TI/prj-gestao-financeira-integrada)** — branch [`feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento`](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/tree/feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento)
-  - Commits: 142 (excluindo o commit inicial vazio)
-  - Arquivos alterados: 110 — reorganização de projetos, ambiente, configurações e testes
+  - Commits: 163 (excluindo o commit inicial vazio e o merge de sincronização)
+  - Arquivos alterados: 120 — reorganização de projetos, ambiente, configurações, frontend e documentação
+
+### Sincronização com `develop`
+
+- Conflito resolvido em `prj-gestao-financeira-integrada.slnx`, mantendo os caminhos reorganizados `AppHost/` e `Server/` e a documentação em `docs/`.
+- Merge de sincronização publicado no commit `aa0547e`.
+- A PR permanece aberta e não foi mesclada nem fechada.
 
 ---
 
