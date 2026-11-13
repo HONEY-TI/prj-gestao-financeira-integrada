@@ -176,13 +176,47 @@ wait_for_device_code() {
     return 1
 }
 
-open_browser() {
-    local url="$1" helper sock
+open_browser() {    
+    local url="${DEVICE_URL:-https://auth.openai.com/codex/device}"
+    local helper sock i    
+    local published_code
+  
+    # espera até 30s o VS Code criar o socket IPC
+    for ((i = 0; i < 30; i++)); do
+        compgen -G '/tmp/vscode-ipc-*.sock' >/dev/null && break
+        sleep 1
+    done
+
+    published_code="$(extract_device_code)"
+    CLIPBOARD_CONFIRMED=0
+
+    for ((i = 0; i < 30; i++)); do
+        if copy_to_clipboard "$published_code"; then
+            CLIPBOARD_CONFIRMED=1
+            break
+        fi
+        sleep 1
+    done
+
+    if [[ "$CLIPBOARD_CONFIRMED" -eq 1 ]]; then
+        log "código copiado com sucesso: [$published_code]"
+    else
+        log "clipboard indisponível após 30 segundos. Código: [$published_code]"
+    fi
+
+    if [[ "$CLIPBOARD_CONFIRMED" -eq 1 ]]; then
+        log "código confirmado no clipboard"
+    else
+        log "não foi possível confirmar o clipboard após 30 segundos"
+    fi
 
     helper="${BROWSER:-}"
-    if [[ ! -x "$helper" || "$helper" != *browser.sh ]]; then
-        helper="$(/bin/ls -t "$HOME"/.vscode-server/bin/*/bin/helpers/browser.sh 2>/dev/null | head -n 1 || true)"
-    fi
+    if [[ -z "$helper" || ! -x "$helper" || "$helper" != *browser.sh ]]; then
+        helper="$(/bin/ls -t \
+            /vscode/vscode-server/bin/*/bin/helpers/browser.sh \
+            "$HOME"/.vscode-server/bin/*/bin/helpers/browser.sh \
+            2>/dev/null | head -n 1 || true)"
+    fi    
     [[ -n "$helper" ]] || return 1
 
     if [[ -n "${VSCODE_IPC_HOOK_CLI:-}" && -S "$VSCODE_IPC_HOOK_CLI" ]]; then
@@ -192,8 +226,8 @@ open_browser() {
     while IFS= read -r sock; do
         VSCODE_IPC_HOOK_CLI="$sock" timeout 10 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
     done < <(/bin/ls -t /tmp/vscode-ipc-*.sock 2>/dev/null || true)
-
-    return 1
+    
+    env -u VSCODE_IPC_HOOK_CLI -u BROWSER bash -c 'H=$(/bin/ls -t ~/.vscode-server/bin/*/bin/helpers/browser.sh | head -n 1); for S in $(/bin/ls -t /tmp/vscode-ipc-*.sock); do echo "tentando $S"; VSCODE_IPC_HOOK_CLI="$S" timeout 10 "$H" "https://auth.openai.com/codex/device"; echo "exit=$?"; done'
 }
 
 publish_device_auth() {
@@ -202,62 +236,65 @@ publish_device_auth() {
 
     log "publicando device code: [$code]"
 
-    cat >"$tmp_file" <<EOT
-{
-    "url": "$DEVICE_URL",
-    "code": "$code"
-}
-EOT
+    rm -f "$DEVICE_AUTH_FILE" "$tmp_file" || {
+        log "erro ao remover device-auth anterior"
+        return 1
+    }
+
+    # Gera JSON usando jq para escapar corretamente os valores.
+    if ! jq -n \
+        --arg url "$DEVICE_URL" \
+        --arg code "$code" \
+        '{url: $url, code: $code}' > "$tmp_file"; then
+        log "erro ao gerar JSON de device-auth"
+        return 1
+    fi
 
     chmod 600 "$tmp_file"
-    mv -f "$tmp_file" "$DEVICE_AUTH_FILE"
 
-    log "device-auth publicado em: $DEVICE_AUTH_FILE"
-
-    if ! copy_to_clipboard "$code"; then
-        log "clipboard indisponível. Código: [$code]"
+    if ! jq -e \
+        --arg url "$DEVICE_URL" \
+        --arg code "$code" \
+        '.url == $url and .code == $code' \
+        "$tmp_file" >/dev/null; then
+        log "erro: validação do JSON temporário falhou"
+        return 1
     fi
 
-    # ------------------------------------------------------
-    # Abre o navegador
-    # ------------------------------------------------------
-    log "abrindo navegador..."
-    if open_browser "$DEVICE_URL"; then
-        log "navegador aberto no host"
-    else
-        log "não foi possível abrir o navegador automaticamente"
+    if ! mv -f "$tmp_file" "$DEVICE_AUTH_FILE"; then
+        log "erro ao publicar device-auth"
+        return 1
     fi
-    log "abra: $DEVICE_URL"
-    env -u VSCODE_IPC_HOOK_CLI -u BROWSER bash -c 'H=$(/bin/ls -t ~/.vscode-server/bin/*/bin/helpers/browser.sh | head -n 1); for S in $(/bin/ls -t /tmp/vscode-ipc-*.sock); do echo "tentando $S"; VSCODE_IPC_HOOK_CLI="$S" timeout 10 "$H" "https://auth.openai.com/codex/device"; echo "exit=$?"; done'
+
+    log "device-auth publicado e validado: $DEVICE_AUTH_FILE"
 }
 
 # ------------------------------------------------------
 # Clipboard
 # ------------------------------------------------------
 copy_to_clipboard() {
-    local text="$1"
-    echo "###########"
-    echo "DISPLAY: ${DISPLAY:-}"
-    echo "###########"
-    if [[ -z "${DISPLAY:-}" ]]; then
-        return 1
+    local code="$1"
+
+    # 1. Windows clipboard (WSL)
+    if command -v clip.exe >/dev/null 2>&1; then
+        if printf '%s' "$code" | clip.exe; then
+            log "device code copiado para clipboard do Windows"
+            return 0
+        fi
     fi
 
-    if command -v xclip >/dev/null 2>&1 \
-        && printf '%s' "$text" | xclip -selection clipboard >/dev/null 2>&1; then
-        log "device code copiado para o clipboard (xclip)"
-        return 0
+    # 2. Clipboard via X11
+    if command -v xclip >/dev/null 2>&1; then
+        if printf '%s' "$code" | xclip -selection clipboard 2>/dev/null; then
+            log "device code copiado via xclip"
+            return 0
+        fi
     fi
 
-    if command -v xsel >/dev/null 2>&1 \
-        && printf '%s' "$text" | xsel --clipboard --input >/dev/null 2>&1; then
-        log "device code copiado para o clipboard (xsel)"
-        return 0
-    fi
-
+    # 3. Clipboard indisponível
+    log "não foi possível acessar o clipboard"
     return 1
 }
-
 
 authenticate_with_device_code() {
     local device_code
@@ -270,7 +307,22 @@ authenticate_with_device_code() {
     device_code="$(wait_for_device_code)" || exit 1
     log "device code detectado: [$device_code]"
 
-    publish_device_auth "$device_code"
+    publish_device_auth "$device_code" &
+    TASK_PID=$!
+
+    if wait "$TASK_PID"; then
+        log "publicação concluída"
+    else
+        log "erro na publicação"
+        return 1
+    fi
+    # ------------------------------------------------------
+    # Abre o navegador somente após validar a publicação
+    # ------------------------------------------------------
+    log "abrindo navegador..."
+    log "abra: $DEVICE_URL"
+    open_browser
+
     log "solicitação enviada para VS Code"
     log "navegador será aberto no host"
     log "código será copiado para o clipboard"
@@ -291,41 +343,6 @@ ensure_authenticated() {
         authenticate_with_device_code
     fi
 }
-
-
-# ==========================================================
-# Trust (override em runtime, nada é gravado em ~/.codex)
-# ==========================================================
-#
-# Cria um wrapper "codex" que injeta:
-#   -c 'projects."/workspace".trust_level="trusted"'
-# O wrapper fica num diretório temporário no início do PATH,
-# então qualquer chamada a "codex" depois do exec herda o trust.
-
-ensure_workspace_trusted() {
-    log "configurando trust (override em runtime)..."
-
-    local real_codex wrapper_dir
-    real_codex="$(command -v codex)"
-    wrapper_dir="$(mktemp -d)"
-
-    cat >"$wrapper_dir/codex" <<EOT
-#!/usr/bin/env bash
-exec "$real_codex" -c 'projects."$WORKSPACE".trust_level="trusted"' "\$@"
-EOT
-    chmod 755 "$wrapper_dir/codex"
-
-    export PATH="$wrapper_dir:$PATH"
-    log "$WORKSPACE trusted via override (nenhum arquivo alterado)"
-}
-
-# ==========================================================
-# Configuração
-# ==========================================================
-#
-# O config.toml do projeto ($WORKSPACE/.codex/config.toml) é OPCIONAL.
-# Quando não existe, apenas registramos um aviso e seguimos em frente,
-# validando somente o config.toml do usuário (CODEX_CONFIG).
 
 check_project_config() {
     if [[ -f "$PROJECT_CONFIG" ]]; then
@@ -358,13 +375,8 @@ PY
 main() {
     trap 'on_error $? $LINENO "$BASH_COMMAND"' ERR
     trap cleanup_login EXIT
-    log "🗑️  limpando estado anterior do codex..."
-    rm -rf "$CODEX_HOME"
-    log "✅ .codex removido"
-    log_environment
     prepare_environment
     ensure_authenticated
-    ensure_workspace_trusted
 
     if check_project_config; then
         validate_toml_files "$PROJECT_CONFIG" "$CODEX_CONFIG"
