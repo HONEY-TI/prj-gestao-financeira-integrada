@@ -1,6 +1,6 @@
 ﻿using Business.Authentication.Abstractions;
 using Microsoft.Extensions.Options;
-
+using Application.Authentication;
 namespace xUnit.Test.Application.Authentication;
 public sealed class TokenConfigurationTest
 {

@@ -1,13 +1,13 @@
 ﻿$baseDirectory = ($PWD)
-$projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "XunitTests"
+$projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "xUnit.Test"
 
 if (-Not (Test-Path -Path $projectTestPath)) {
     $baseDirectory = (Resolve-Path -Path ..).Path    
-    $projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "XunitTests"
+    $projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "xUnit.Test"
 }
 
 $projectAngular = (Resolve-Path -Path "$baseDirectory\AngularApp");
-$sourceDirs = "$baseDirectory\Despesas.Application;$baseDirectory\Despesas.Domain;$baseDirectory\Despesas.Repository;$baseDirectory\Despesas.Backend;$baseDirectory\AngularApp;"
+$sourceDirs = "$baseDirectory\Despesas.Application;$baseDirectory\Despesas.Domain;$baseDirectory\Despesas.Repository;$baseDirectory\Despesas.Backend;$baseDirectory\frontend;"
 $filefilters = "$baseDirectory\Migrations.DataSeeders\**;-$baseDirectory\Migrations.MySqlServer\**;-$baseDirectory\Migrations.MsSqlServer\**;-$baseDirectory\Despesas.CrossCutting\**;-$baseDirectory\Despesas.Application\HyperMedia\**"
 $reportPath = Join-Path -Path ($projectTestPath) -ChildPath "TestResults"
 $coveragePath = Join-Path -Path $reportPath -ChildPath "coveragereport"

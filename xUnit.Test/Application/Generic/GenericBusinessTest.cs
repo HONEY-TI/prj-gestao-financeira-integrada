@@ -1,8 +1,9 @@
-﻿using AutoMapper;
-using Repository.Persistency.Generic;
+﻿using Application.Abstractions.Generic;
 using Application.Dtos;
-using Application.Abstractions.Generic;
 using Application.Dtos.Profile;
+using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
+using Repository.Persistency.Generic;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Generic;
@@ -15,7 +16,7 @@ public sealed class GenericBusinessTests
     public GenericBusinessTests()
     {
         _mockRepositorio = new Mock<IRepositorio<Categoria>>(MockBehavior.Default);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }, NullLoggerFactory.Instance));
         _genericBusiness = new GenericBusiness<CategoriaDto, Categoria>(_mapper, _mockRepositorio.Object);
         _categorias = CategoriaFaker.Instance.Categorias();
     }
@@ -45,7 +46,7 @@ public sealed class GenericBusinessTests
         var objects = UsuarioFaker.Instance.GetNewFakersUsuarios();
         var repositoryMock = new Mock<IRepositorio<Usuario>>();
         repositoryMock.Setup(repo => repo.GetAll()).Returns(objects);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }, NullLoggerFactory.Instance));
         var business = new GenericBusiness<UsuarioDto, Usuario>(_mapper, repositoryMock.Object);
 
         // Act
@@ -67,7 +68,7 @@ public sealed class GenericBusinessTests
         var id = obj.Id;
         var repositoryMock = new Mock<IRepositorio<Despesa>>();
         repositoryMock.Setup(repo => repo.Get(id)).Returns(obj);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }, NullLoggerFactory.Instance));
         var business = new GenericBusiness<DespesaDto, Despesa>(_mapper, repositoryMock.Object);
 
         // Act
@@ -87,7 +88,7 @@ public sealed class GenericBusinessTests
         var obj = ReceitaFaker.Instance.ReceitasVMs().First();
         var repositoryMock = new Mock<IRepositorio<Receita>>();
         repositoryMock.Setup(repo => repo.Update(It.IsAny<Receita>()));
-        var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }));
+        var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }, NullLoggerFactory.Instance));
         var business = new GenericBusiness<ReceitaDto, Receita>(mapper, repositoryMock.Object);
 
         // Act
@@ -108,7 +109,7 @@ public sealed class GenericBusinessTests
         var obj = objects.First();
         var repositoryMock = Usings.MockRepositorio(objects);
         repositoryMock.Setup(repo => repo.Delete(It.IsAny<Usuario>()));
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }, NullLoggerFactory.Instance));
         var business = new GenericBusiness<UsuarioDto, Usuario>(_mapper, repositoryMock.Object);
 
         // Act

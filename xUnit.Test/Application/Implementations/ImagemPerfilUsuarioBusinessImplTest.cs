@@ -1,9 +1,10 @@
-﻿using AutoMapper;
-using Infrastructure.Amazon.Abstractions;
-using Repository.Persistency.Generic;
-using Application.Implementations;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
+using Application.Implementations;
+using AutoMapper;
+using Infrastructure.Amazon.Abstractions;
+using Microsoft.Extensions.Logging.Abstractions;
+using Repository.Persistency.Generic;
 using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 
@@ -25,7 +26,7 @@ public sealed class ImagemPerfilUsuarioBusinessImplTests
         _repositorioUsuarioMock = new Mock<IRepositorio<Usuario>>();
         _mockAmazonS3Bucket = new Mock<IAmazonS3Bucket>();
 
-        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<ImagemPerfilUsuarioProfile>()));
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<ImagemPerfilUsuarioProfile>(), NullLoggerFactory.Instance));
 
         _imagemPerfilUsuarioBusiness = new ImagemPerfilUsuarioBusinessImpl<ImagemPerfilDto, UsuarioDto>(
             _mapper,

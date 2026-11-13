@@ -1,8 +1,9 @@
-﻿using AutoMapper;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
+using AutoMapper;
 using Infrastructure.Amazon;
 using Infrastructure.Amazon.Abstractions;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace xUnit.Test.Infrastructure;
 public sealed class AmazonS3BucketTest
@@ -32,7 +33,7 @@ public sealed class AmazonS3BucketTest
         // Arrange        
         var mapper = new Mapper(new MapperConfiguration(cfg => {
             cfg.AddProfile<ImagemPerfilUsuarioProfile>();
-        }));
+        }, NullLoggerFactory.Instance));
         var perfilFileVM = new ImagemPerfilDto
         {
             Name = "test-image.jpg",
@@ -58,7 +59,7 @@ public sealed class AmazonS3BucketTest
         // Arrange
         var mapper = new Mapper(new MapperConfiguration(cfg => {
             cfg.AddProfile<ImagemPerfilUsuarioProfile>();
-        }));
+        }, NullLoggerFactory.Instance));
         var mockAmazonS3Bucket = new Mock<IAmazonS3Bucket>(MockBehavior.Strict);
         mockAmazonS3Bucket.Setup(s => s.WritingAnObjectAsync(It.IsAny<ImagemPerfilUsuario>(), It.IsAny<byte[]>())).Throws(() => new Exception("AmazonS3Bucket_WritingAnObjectAsync_Errro"));
         var perfilFileVM = new ImagemPerfilDto

@@ -12,7 +12,7 @@ appsettings.*.local.json
 appsettings.Secrets.json
 *.pfx
 *.p12
-*.pem
+**/*.pem
 *.key
 *.crt
 *.cer
@@ -32,7 +32,10 @@ firebase-adminsdk*.json
 .azure/
 .secrets/
 .user-secrets/
-
+**/.xauth-devc
+**/.codex/device-auth.json
+**/.codex/device-auth.json.tmp
+**/AGENTS.md
 # =========================================================
 # 📝 LOGS
 # =========================================================
@@ -215,3 +218,10 @@ docker-compose.local.yml
 *.rej
 *.bak
 .tmp/
+
+# =========================================================
+# 📦 TEMPORÁRIOS Ai
+# =========================================================
+**/.ai/
+**/.codex/
+**/AGENTS.md

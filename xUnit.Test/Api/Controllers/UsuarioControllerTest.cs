@@ -1,13 +1,14 @@
-﻿using AutoMapper;
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.Dtos;
 using Application.Dtos.Profile;
-using WebApi.Controllers;
+using AutoMapper;
+using Domain.Core.ValueObject;
 using GlobalException.CustomExceptions;
 using GlobalException.CustomExceptions.Core;
-using Domain.Core.ValueObject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using WebApi.Controllers;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Api.Controllers;
@@ -24,7 +25,7 @@ public sealed class UsuarioControllerTest
         _mockUsuarioBusiness = new Mock<IUsuarioBusiness<UsuarioDto>>();
         _usuarioController = new UsuarioController(_mockUsuarioBusiness.Object);
         var usuarios = UsuarioFaker.Instance.GetNewFakersUsuarios(20);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }, NullLoggerFactory.Instance));
         _usuarioNormal = _mapper.Map<UsuarioDto>(usuarios.FindAll(u => u.PerfilUsuario == PerfilUsuario.Perfil.User).First());
         _usuarioDtos = _mapper.Map<List<UsuarioDto>>(usuarios);
     }

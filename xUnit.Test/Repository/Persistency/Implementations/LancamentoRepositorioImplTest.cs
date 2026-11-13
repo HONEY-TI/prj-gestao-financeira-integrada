@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using xUnit.Test.Repository.Persistency.Implementations.Fixtures;
+using Repository.Persistency.Implementations;
 
 namespace xUnit.Test.Repository.Persistency.Implementations;
 public sealed class LancamentoRepositorioImplTest : IClassFixture<LancamentoRepositorioFixture>

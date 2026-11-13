@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.Dtos;
 using Application.Dtos.Profile;
-using WebApi.Controllers;
+using AutoMapper;
 using GlobalException.CustomExceptions.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using WebApi.Controllers;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Api.Controllers;
@@ -20,7 +21,7 @@ public sealed class ReceitaControllerTest
     {
         _mockReceitaBusiness = new Mock<IBusinessBase<ReceitaDto, Receita>>();
         _receitaController = new ReceitaController(_mockReceitaBusiness.Object);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }, NullLoggerFactory.Instance));
         _receitaDtos = _mapper.Map<List<ReceitaDto>>(ReceitaFaker.Instance.Receitas());
     }
 

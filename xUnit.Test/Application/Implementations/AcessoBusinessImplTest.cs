@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.Authentication;
 using Application.CommonDependenceInject;
 using Application.Dtos;
@@ -7,16 +6,17 @@ using Application.Dtos.Abstractions;
 using Application.Dtos.Core;
 using Application.Dtos.Profile;
 using Application.Implementations;
-using WebApi.CommonDependenceInject;
+using AutoMapper;
+using EasyCryptoSalt;
 using GlobalException.CustomExceptions.Acesso;
 using Infrastructure.Email;
-using EasyCryptoSalt;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Persistency.Abstractions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
+using WebApi.CommonDependenceInject;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Implementations;
@@ -40,7 +40,7 @@ public sealed class AcessoBusinessImplTest
         _singingConfiguration = services.BuildServiceProvider().GetService<SigningConfigurations>();
         var crypto = services.BuildServiceProvider().GetService<ICrypto>();
         _repositorioMock = new Mock<IAcessoRepositorioImpl>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<AcessoProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<AcessoProfile>(); }, NullLoggerFactory.Instance));
         _acessoBusiness = new AcessoBusinessImpl<AcessoDto, LoginDto>(_mapper, _repositorioMock.Object, _singingConfiguration, new EmailSender(), crypto);
     }
 

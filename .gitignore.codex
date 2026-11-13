@@ -1,0 +1,3 @@
+# acrescente ao .gitignore da raiz
+.codex/device-auth.json
+.codex/device-auth.json.tmp
