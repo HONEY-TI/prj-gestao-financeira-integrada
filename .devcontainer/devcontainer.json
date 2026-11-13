@@ -3,35 +3,106 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "dockerComposeFile": ["docker-compose.yml"],
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
   "service": "prj-gestao-integrada",
   "workspaceFolder": "/workspace",
   "remoteUser": "ubuntu",
-  "updateRemoteUserUID": true,
+  "updateRemoteUserUID": false,
   "overrideCommand": false,
-  "initializeCommand": "f=$(ls -t \"${XDG_RUNTIME_DIR}\"/.mutter-Xwaylandauth.* 2>/dev/null | head -n1); rm -rf .devcontainer/.xauth-devc; if [ -n \"$f\" ]; then cp \"$f\" .devcontainer/.xauth-devc; else : > .devcontainer/.xauth-devc; fi",
-  "postCreateCommand": "bash setup-codex.sh ",
-  "postStartCommand": "aspire certs trust",
-  //"updateContentCommand": "setup-dev-certs.sh",
-  "waitFor": "postCreateCommand",
+  "postCreateCommand": "bash tool-install.sh",
+  "postStartCommand": "bash setup-start.sh",  
+  "waitFor": "postStartCommand",
+  "shutdownAction": "stopCompose",
+  //"postStartCommand": "aspire certs trust || true && aspire-clean.sh && open-user-shell.sh",
+  //"postCreateCommand": "bash setup-codex.sh && bash setup-antigravity.sh",
+  //"waitFor": "postStartCommand",
   "containerEnv": {
     "IN_DEVCONTAINER": "true",
     "DISPLAY": "${localEnv:DISPLAY::0}",
     "XAUTHORITY": "/tmp/.xauth-devc",
     "VSCODE_IPC_HOOK_CLI": "${localEnv:VSCODE_IPC_HOOK_CLI}"
-  },
+  },  
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
-    "source=${localWorkspaceFolder}/.devcontainer/.xauth-devc,target=/tmp/.xauth-devc,type=bind,readonly",
+    "source=${localWorkspaceFolder}/.cache/.xauth-devc,target=/tmp/.xauth-devc,type=bind",
     "type=volume,target=/home/ubuntu/.vscode-server",
     "source=${localEnv:HOME}/.ssh,target=/home/ubuntu/.ssh,type=bind"
   ],
-  "forwardPorts": [17015, 7309, 15183, 5488, 46233, 41555, 35923],
+  "forwardPorts": [
+    17015,
+    7309,
+    15183,
+    5488,
+    46233,
+    41555,
+    35923
+  ],
+  "portsAttributes": {
+    "17015": {
+      "label": "Aspire",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    },
+    "7309": {
+      "label": "Server",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
   "customizations": {
     "vscode": {
       "dev.containers.executeInWSL": true,
       "dev.containers.executeInWSLDistro": "Ubuntu",
       "extensions": [
+        // --- .NET / C# / Aspire ---
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-dotnettools.vscodeintellicode-csharp",
+        "microsoft-aspire.aspire-vscode",
+        "patcx.vscode-nuget-gallery",
+        "jchannon.csharpextensions",
+        "k--kato.docomment",
+        "editorconfig.editorconfig",
+        "humao.rest-client",
+        "ms-azuretools.vscode-containers",
+        // --- Angular / TypeScript ---
+        "Angular.ng-template",
+        "alexiv.vscode-angular2-files@1.6.4",
+        "infinity1207.angular2-switcher@0.4.0",
+        "john-crowson.angular-file-changer@0.0.4",
+        "natewallace.angular2-inline@0.0.17",
+        "hardikpthv.ngrxsnippets@9.1.0",
+        "pkosta2006.rxjs-snippets@0.0.2",
+        "baflo.jasminesnippetsts@1.3.0",
+        "mattpocock.ts-error-translator@0.10.1",
+        "ms-vscode.vscode-typescript-next@6.0.20260416",
+        "typescriptteam.native-preview@0.20260611.2",
+        "dskwrk.vscode-generate-getter-setter@0.5.0",
+        // --- Lint / formatação ---
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "inferrinizzard.prettier-sql-vscode@1.6.0",
+        // --- Git ---
+        "eamodio.gitlens@19.0.1",
+        "donjayamanne.githistory@0.6.20",
+        "arturock.gitstash@6.13.0",
+        // --- Markdown / docs ---
+        "yzhang.markdown-all-in-one@3.6.3",
+        "shd101wyy.markdown-preview-enhanced@0.8.30",
+        "bierner.markdown-mermaid@1.32.1",
+        "bierner.markdown-checkbox@0.4.0",
+        "mathematic.vscode-pdf@0.1.11",
+        // --- IA / produtividade ---
+        "openai.chatgpt@26.810.52044",
+        "visualstudioexptteam.vscodeintellicode@1.3.2",
+        "visualstudioexptteam.intellicode-api-usage-examples@0.2.9",
+        // --- Visual / utilitários ---        
         "ms-dotnettools.csdevkit",
         "Angular.ng-template",
         "openai.chatgpt@26.810.52044",
