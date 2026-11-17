@@ -224,4 +224,6 @@ docker-compose.local.yml
 # =========================================================
 **/.ai/
 **/.codex/
+**/.gemini/
 **/AGENTS.md
+**/GEMINI.md
