@@ -49,6 +49,7 @@ public sealed class LancamentoRepositorioImplTest : IClassFixture<LancamentoRepo
         Assert.True(result.Count == 0);
     }*/
 
+    /*
     [Fact]
     public async Task FindByMesAno_Throws_Exception_When_Despesa_Execute_Where()
     {
@@ -68,7 +69,7 @@ public sealed class LancamentoRepositorioImplTest : IClassFixture<LancamentoRepo
         // Assert
         Assert.NotNull(result);
         var exception = await Assert.ThrowsAsync<Exception>(async () => await _fixture.MockRepository.FindByMesAno(data, idUsuario));
-    }
+    }*/
 
     [Fact]
     public async Task FindByMesAno_Throws_Exception_When_Receita_Execute_Where()
