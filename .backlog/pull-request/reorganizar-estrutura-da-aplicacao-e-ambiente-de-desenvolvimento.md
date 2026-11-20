@@ -22,16 +22,16 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 | --------------------- | ------------------ |
 | 🌿 Branch de origem   | `feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento` |
 | 🎯 Branch de destino  | `develop`          |
-| 📝 Total de commits   | 175                |
-| 📁 Arquivos alterados | 120                |
+| 📝 Total de commits   | 177                |
+| 📁 Arquivos alterados | 121                |
 
 ---
 
 ## 📦 Repositórios/branches atualizados
 
 - **[prj-gestao-financeira-integrada](https://github.com/HONEY-TI/prj-gestao-financeira-integrada)** — branch [`feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento`](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/tree/feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento)
-  - Commits: 173 (excluindo o commit inicial vazio e o merge de sincronização)
-  - Arquivos alterados: 120 — reorganização da estrutura .NET/Aspire, ambiente DevContainer/Docker, automações de build/cobertura, suíte de testes xUnit e frontend Angular/Capacitor
+  - Commits: 175 (excluindo o commit inicial vazio e o merge de sincronização)
+  - Arquivos alterados: 121 — reorganização da estrutura .NET/Aspire, ambiente DevContainer/Docker, automações de build/cobertura, suíte de testes xUnit e frontend Angular/Capacitor
 
 ---
 
@@ -45,12 +45,9 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 
 ---
 
-## Pendências não commitadas
-
-- `xUnit.Test/Domain/Core/ExtensionTest.cs` permanece fora dos commits desta execução porque o padrão `**/core` do `.gitignore` ignora o caminho. A alteração local adiciona o `using Domain;` e requer revisão/regularização do padrão de ignorados antes de ser publicada.
-
 ## 📝 Commits
 
+- test(xUnit.Test/Domain/Core): importar namespace Domain no teste `xUnit.Test/Domain/Core/ExtensionTest.cs` - cea315a
 - feat(.devcontainer/setup): adicionar configuração de certificados `.devcontainer/setup/setup-dev-certs.sh` - dfd6e2e
 - chore(.devcontainer/scripts): remover script antigo de certificados `.devcontainer/scripts/setup-dev-certs.sh` - e30c61e
 - chore(.devcontainer/scripts): remover script obsoleto do Codex `.devcontainer/scripts/setup-codex.sh` - 8459638
