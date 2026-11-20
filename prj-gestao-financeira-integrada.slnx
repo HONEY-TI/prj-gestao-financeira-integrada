@@ -3,7 +3,7 @@
     <File Path="add-devcontainer-to-sln.ps1" />
   </Folder>
   <Folder Name="/src/">
-    <File Path="prj-gestao-financeira-integrada.Server/.editorconfig" />
+    <File Path="Server/.editorconfig" />
     <Project Path="src/Application/Application.csproj" />
     <Project Path="src/CrossCutting/CrossCutting.csproj" />
     <Project Path="src/Domain/Domain.csproj" />
@@ -187,14 +187,13 @@
   <Project Path="migrations/MySqlServer/Migrations.MySqlServer.csproj" />
   <Project Path="migrations/Oracle/Migrations.Oracle.csproj" />
 </Folder>
-<Folder Name="/docs/"><File Path="docs/01-inventario.md" /><File Path="docs/02-arquitetura-atual.md" /><File Path="docs/03-plano-refatoracao.md" /><File Path="docs/04-arquitetura-destino.md" /><File Path="docs/05-mapeamento-componentes.md" /><File Path="docs/06-validacao.md" /></Folder>
+  <Project Path="AppHost/AppHost.csproj" />
   <Project Path="frontend/frontend.esproj">
     <Build />
     <Deploy />
   </Project>
-  <Project Path="prj-gestao-financeira-integrada.AppHost/prj-gestao-financeira-integrada.AppHost.csproj" />
-  <Project Path="prj-gestao-financeira-integrada.Server/prj-gestao-financeira-integrada.Server.csproj" />
+  <Project Path="Server/Server.csproj" />
   <Project Path="xUnit.Test/xUnit.Test.csproj" Id="b64d91bb-9ced-477f-9b36-12923f3981b5">
     <Build Solution="Debug|*" Project="false" />
   </Project>
-</Solution>
+<Folder Name="/docs/"><File Path="docs/01-inventario.md" /><File Path="docs/02-arquitetura-atual.md" /><File Path="docs/03-plano-refatoracao.md" /><File Path="docs/04-arquitetura-destino.md" /><File Path="docs/05-mapeamento-componentes.md" /><File Path="docs/06-validacao.md" /></Folder></Solution>

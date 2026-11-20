@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 using xUnit.Test.__mock__.Repository;
 using xUnit.Test.Repository.Persistency.Implementations.Fixtures;
+using Repository.Persistency.Implementations;
 
 namespace xUnit.Test.Repository.Persistency.Implementations;
 

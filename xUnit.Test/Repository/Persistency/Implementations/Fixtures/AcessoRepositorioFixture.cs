@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Core.ValueObject;
 using Repository.Mapping.Abstractions;
 using xUnit.Test.__mock__.Repository;
+using Repository.Persistency.Implementations;
 
 namespace xUnit.Test.Repository.Persistency.Implementations.Fixtures;
 

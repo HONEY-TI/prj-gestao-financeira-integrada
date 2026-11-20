@@ -5,7 +5,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://prj-estacio-despesas-pessoais.dev.localhost:17015;http://prj-estacio-despesas-pessoais.dev.localhost:15183",
+      "applicationUrl": "https://prj-gestao-financeira-integrada.dev.localhost:17015;http://prj-gestao-financeira-integrada.dev.localhost:15183",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
@@ -17,7 +17,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://prj-estacio-despesas-pessoais.dev.localhost:15183",
+      "applicationUrl": "http://prj-gestao-financeira-integrada.dev.localhost:15183",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",

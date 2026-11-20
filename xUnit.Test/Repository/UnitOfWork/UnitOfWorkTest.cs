@@ -2,6 +2,7 @@
 using Repository.UnitOfWork.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using xUnit.Test.__mock__.Entities;
+using Repository.UnitOfWork;
 
 namespace xUnit.Test.Repository.UnitOfWork;
 
@@ -20,7 +21,7 @@ public sealed class UnitOfWorkTest
     public async Task Repository_Should_Return_BaseUnitOfWork_Instance()
     {
         using var context = GetContext(nameof(Repository_Should_Return_BaseUnitOfWork_Instance));
-        var uow = new UnitOfWork.UnitOfWork<Usuario>(context);
+        var uow = new UnitOfWork<Usuario>(context);
 
         var repo = await Task.FromResult(uow.Repository);
 
@@ -32,7 +33,7 @@ public sealed class UnitOfWorkTest
     public async Task CommitAsync_Should_Persist_Changes()
     {
         using var context = GetContext(nameof(CommitAsync_Should_Persist_Changes));
-        var uow = new UnitOfWork.UnitOfWork<Usuario>(context);
+        var uow = new UnitOfWork<Usuario>(context);
 
         var usuario = UsuarioFaker.Instance.GetNewFaker();
         await uow.Repository.Insert(usuario);

@@ -1,14 +1,15 @@
 ﻿$baseDirectory = ($PWD)
-$projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "XunitTests"
+$projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "xUnit.Test"
 
 if (-Not (Test-Path -Path $projectTestPath)) {
     $baseDirectory = (Resolve-Path -Path ..).Path    
-    $projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "XunitTests"
+    $projectTestPath = Join-Path -Path ($baseDirectory) -ChildPath "xUnit.Test"
 }
 
-$projectAngular = (Resolve-Path -Path "$baseDirectory\AngularApp");
-$sourceDirs = "$baseDirectory\Despesas.Application;$baseDirectory\Despesas.Domain;$baseDirectory\Despesas.Repository;$baseDirectory\Despesas.Backend;$baseDirectory\AngularApp;"
-$filefilters = "$baseDirectory\Migrations.DataSeeders\**;-$baseDirectory\Migrations.MySqlServer\**;-$baseDirectory\Migrations.MsSqlServer\**;-$baseDirectory\Despesas.CrossCutting\**;-$baseDirectory\Despesas.Application\HyperMedia\**"
+$projectAngular = (Resolve-Path -Path "$baseDirectory\frontend");
+$sourceDirs = "$baseDirectory\src\Application;$baseDirectory\src\Domain;$baseDirectory\src\Repository;$baseDirectory\Server;$baseDirectory\frontend;"
+#$filefilters = "$baseDirectory\migrations.DataSeeders\**;-$baseDirectory\Migrations.MySqlServer\**;-$baseDirectory\Migrations.MsSqlServer\**;-$baseDirectory\Despesas.CrossCutting\**;-$baseDirectory\Despesas.Application\HyperMedia\**"
+$filefilters = "$baseDirectory\migrations\**;-$baseDirectory\src\CrossCutting\**;"
 $reportPath = Join-Path -Path ($projectTestPath) -ChildPath "TestResults"
 $coveragePath = Join-Path -Path $reportPath -ChildPath "coveragereport"
 $coverageAngularPath = Join-Path -Path $projectAngular -ChildPath "coverage"
@@ -24,7 +25,7 @@ function Wait-TestResults {
  } 
 
 # Gera o Relatório de Cobertura de Código 
-dotnet test  $projectTestPath/XUnit.Tests.csproj --results-directory $reportPath /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect:"XPlat Code Coverage;Format=opencover"
+dotnet test  $projectTestPath/XUnit.Test.csproj --results-directory $reportPath /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect:"XPlat Code Coverage;Format=opencover"
 Wait-TestResults
 reportgenerator -reports:$projectTestPath\coverage.cobertura.xml  -targetdir:$coveragePath -reporttypes:"Html;lcov;" -sourcedirs:$sourceDirs -filefilters:-$filefilters
 
@@ -48,5 +49,5 @@ if (-not (Test-Path $projectAngular\node_modules)) {
 }
 
 # Executa Teste Unitários e gera o relatório de cobertura do Frontend 
-$watchProcess = Start-Process npm -ArgumentList "run", "test:coverage" -WorkingDirectory $projectAngular -NoNewWindow -PassThru
-$watchProcess.WaitForExit()
+#$watchProcess = Start-Process npm -ArgumentList "run", "test:coverage" -WorkingDirectory $projectAngular -NoNewWindow -PassThru
+#$watchProcess.WaitForExit()
