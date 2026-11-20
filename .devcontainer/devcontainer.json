@@ -9,17 +9,17 @@
   "service": "prj-gestao-integrada",
   "workspaceFolder": "/workspace",
   "remoteUser": "ubuntu",
-  "updateRemoteUserUID": true,
+  "updateRemoteUserUID": false,
   "overrideCommand": false,
-  "postCreateCommand": "",
-  "postStartCommand": "bash tool-install.sh && bash setup-start.sh",  
+  "postCreateCommand": "bash tool-install.sh",
+  "postStartCommand": "bash setup-start.sh",  
   "waitFor": "postStartCommand",
   "shutdownAction": "stopCompose",
   //"postStartCommand": "aspire certs trust || true && aspire-clean.sh && open-user-shell.sh",
   //"postCreateCommand": "bash setup-codex.sh && bash setup-antigravity.sh",
   //"waitFor": "postStartCommand",
   "containerEnv": {
-    "IN_DEVCONTAINER": "true",
+    //"IN_DEVCONTAINER": "true",
     "DISPLAY": "${localEnv:DISPLAY::0}",
     "XAUTHORITY": "/tmp/.xauth-devc",
     "VSCODE_IPC_HOOK_CLI": "${localEnv:VSCODE_IPC_HOOK_CLI}"
@@ -32,7 +32,8 @@
   ],
   "forwardPorts": [
     17015,
-    7309,
+    7310,
+    6380,
     15183,
     5488,
     46233,
@@ -40,12 +41,12 @@
     35923
   ],
   "portsAttributes": {
-    "17015": {
+    "17016": {
       "label": "Aspire",
       "onAutoForward": "notify",
       "requireLocalPort": true
     },
-    "7309": {
+    "7310": {
       "label": "Server",
       "onAutoForward": "notify",
       "requireLocalPort": true
