@@ -6,7 +6,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var cache = builder.AddRedis("cache");
 
 var server = builder
-    .AddProject<Projects.Server>("server")
+    .AddProject<Projects.AppServer>("server")
     .WithReference(cache)
     .WaitFor(cache)
     .WithExternalHttpEndpoints();

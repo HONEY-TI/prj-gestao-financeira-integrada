@@ -5,7 +5,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<AspireUseCliBundle>true</AspireUseCliBundle>
+		<AspireUseCliBundle>false</AspireUseCliBundle>
 		<UserSecretsId>3a1b99fd-8f8d-479b-934e-d376552a2801</UserSecretsId>
 	</PropertyGroup>
 
@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Server\Server.csproj" />
+		<ProjectReference Include="..\AppServer\AppServer.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
