@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Scripts que precisam terminar ANTES de qualquer tarefa (ordem importa)
 PREREQS=(
-    setup-codex
+    setup-codex  
 )
 
 log() {
@@ -61,8 +61,7 @@ main() {
     aspire certs trust 
     if [[ ${#tasks[@]} -eq 0 ]]; then
         tasks=(
-            setup-codex            
-            aspire-clean
+            #setup-codex             
         )
     fi
 

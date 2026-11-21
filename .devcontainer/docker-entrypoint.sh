@@ -48,6 +48,7 @@ fi
 # ==========================================
 git config --global user.name "Alex Ribeiro de Faria"
 git config --global user.email "135660435+alexribeirofaria@users.noreply.github.com"
+git config --global --add safe.directory "$PROJECT_WORKSPACE"
 
 # ==========================================
 # NPM CONFIG
@@ -67,12 +68,13 @@ fi
 # ==========================================
 # Volumes nomeados nascem como root; garante o dono nos diretórios que o usuário escreve.
 # ==========================================
-HOME_DIR="/home/$APP_USER"
-chown "$APP_USER:" "$HOME_DIR" 2>/dev/null || true   # sem -R
+chown -R "$APP_USER:users" "$PROJECT_WORKSPACE" 2>/dev/null || true   # sem -R
 
+HOME_DIR="/home/$APP_USER"
 for d in "" .ssh .vscode-server .codex .aspnet shell_history; do
     [ -e "$HOME_DIR/$d" ] || mkdir -p "$HOME_DIR/$d"
-    chown -R "$APP_USER:" "$HOME_DIR/$d" 2>/dev/null || true
+    chown -R "$APP_USER:users" "$HOME_DIR/$d" 2>/dev/null || true
 done
 chmod 700 "$HOME_DIR/.ssh" 2>/dev/null || true
 exec "$@"
+ 

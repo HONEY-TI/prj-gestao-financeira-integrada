@@ -197,7 +197,7 @@ open_browser() {
             CLIPBOARD_CONFIRMED=1
             break
         fi
-        sleep 1
+        sleep 2
     done
 
     if [[ "$CLIPBOARD_CONFIRMED" -eq 1 ]]; then
@@ -222,11 +222,11 @@ open_browser() {
     [[ -n "$helper" ]] || return 1
 
     if [[ -n "${VSCODE_IPC_HOOK_CLI:-}" && -S "$VSCODE_IPC_HOOK_CLI" ]]; then
-        VSCODE_IPC_HOOK_CLI="$VSCODE_IPC_HOOK_CLI" timeout 10 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
+        VSCODE_IPC_HOOK_CLI="$VSCODE_IPC_HOOK_CLI" timeout 15 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
     fi
 
     while IFS= read -r sock; do
-        VSCODE_IPC_HOOK_CLI="$sock" timeout 10 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
+        VSCODE_IPC_HOOK_CLI="$sock" timeout 15 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
     done < <(/bin/ls -t /tmp/vscode-ipc-*.sock 2>/dev/null || true)
     
     env -u VSCODE_IPC_HOOK_CLI -u BROWSER bash -c 'H=$(/bin/ls -t ~/.vscode-server/bin/*/bin/helpers/browser.sh | head -n 1); for S in $(/bin/ls -t /tmp/vscode-ipc-*.sock); do echo "tentando $S"; VSCODE_IPC_HOOK_CLI="$S" timeout 10 "$H" "https://auth.openai.com/codex/device"; echo "exit=$?"; done'
