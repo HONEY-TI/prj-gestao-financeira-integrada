@@ -2,6 +2,7 @@
 # 🔐 SEGREDOS E CREDENCIAIS (NUNCA VERSIONAR)
 # =========================================================
 .env
+**/.env
 .env.*
 !.env.example
 !.env.template

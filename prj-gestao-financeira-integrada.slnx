@@ -192,7 +192,7 @@
     <Build />
     <Deploy />
   </Project>
-  <Project Path="Server/Server.csproj" />
+  <Project Path="AppServer/AppServer.csproj" />
   <Project Path="xUnit.Test/xUnit.Test.csproj" Id="b64d91bb-9ced-477f-9b36-12923f3981b5">
     <Build Solution="Debug|*" Project="false" />
   </Project>
