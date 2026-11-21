@@ -57,7 +57,7 @@ ENV PATH="/usr/local/bin/setup:${PATH}"
 #  STEP 5 - Permissões 
 # =============================================================================
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/bin/tools/tool-install.sh,  /usr/local/bin/setup/setup-start.sh \
+RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/bin/tools/tool-install.sh,  /usr/local/bin/setup/start.sh \
      /usr/local/bin/open-user-shell.sh" \
     > /etc/sudoers.d/${USERNAME}-dev \
     && chmod 0440 /etc/sudoers.d/${USERNAME}-dev
