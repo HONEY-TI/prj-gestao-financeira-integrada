@@ -1,9 +1,9 @@
-**/bin
-**/obj
-**/node_modules
-**/dist
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
 **/coverage
-**/.angular
+**/.angular/
 **/TestResults
 **/*.user
 **/*.suo
@@ -13,8 +13,5 @@
 **/packages
 **/.vs
 **/.idea
-**/.vscode
 **/.DS_Store
 **/Thumbs.db
-**/.angular/
-**/node_modules/
