@@ -18,8 +18,8 @@ public sealed class SigningConfigurationsTest
             Issuer = "testIssuer",
             Audience = "testAudience",
             Seconds = 30,
-            Certificate = "certificate/webapi-cert.pfx",
-            Password = "12345T!"
+            CertificatePath = "certificate/webapi-cert.pfx",
+            PrivateKeyPath = "12345T!"
         });
     }
 
