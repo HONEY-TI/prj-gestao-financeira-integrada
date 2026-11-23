@@ -15,19 +15,30 @@ services:
       NODE_OPTIONS: "--max-old-space-size=4096"
       GITHUB_TOKEN: ${GITHUB_TOKEN:?GITHUB_TOKEN não definido no .env}
       XAUTHORITY: /tmp/.xauth-devc
+      DOTNET_GCHeapHardLimitPercent: "50"
+      UV_THREADPOOL_SIZE: "6"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 6G
+        reservations:
+          cpus: "2.0"
+          memory: 2G
+    memswap_limit: 6G
     volumes:
       - ../:/workspace:cached
       - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:cached
       - dotnet-node-modules:/workspace/frontend/node_modules:cached 
       - shell_history-shared:/home/ubuntu/shell_history:cached 
     ports:
-      - 17015:17015
-      - 7309:7309
-      - 5488:5488      
-      - 15183:15183
-      - 46233:46233
-      - 41555:41555
-      - 35923:35923
+      - "17016:17015"
+      - "7310:7309"
+      - "5489:5488"
+      - "15184:15183"
+      - "46234:46233"
+      - "41556:41555"
+      - "35924:35923"
     cap_add:
       - NET_ADMIN
       - NET_RAW
