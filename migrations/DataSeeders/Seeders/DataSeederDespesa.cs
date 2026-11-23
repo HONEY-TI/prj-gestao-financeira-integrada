@@ -16,15 +16,20 @@ public class DataSeederDespesa : ISeeder
 
     public void Insert()
     {
-        SeedInternal(isInsert: true);
+        SeedInternal(isInsert: true, 2024);
+        SeedInternal(isInsert: true, 2025);
+        SeedInternal(isInsert: true, 2026);
     }
 
     public void Seed()
     {
-        SeedInternal(isInsert: false);
+        SeedInternal(isInsert: false, 2024);
+        SeedInternal(isInsert: false, 2025);
+        SeedInternal(isInsert: false, 2026);
     }
 
-    private void SeedInternal(bool isInsert)
+
+    private void SeedInternal(bool isInsert, int anoDados)
     {
         var user = _context.Usuario.FirstOrDefault(u => u.Nome.Equals("Teste"));
         if (user == null) return;
@@ -52,8 +57,6 @@ public class DataSeederDespesa : ISeeder
             ("Serviço de manutenção", "Serviços")
         };
 
-        // Dados fictícios para todos os meses de janeiro a dezembro.
-        const int anoDados = 2026;
         var startDate = new DateTime(anoDados, 1, 1);
         var endDate = new DateTime(anoDados, 12, 31);
 
@@ -74,6 +77,8 @@ public class DataSeederDespesa : ISeeder
 
                 if (existing != null)
                 {
+                    decimal randon = Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
+                    despesa.Valor = Math.Round(randon, 2);
                     existing.Valor = despesa.Valor;
                     existing.DataVencimento = despesa.DataVencimento;
                 }
@@ -120,7 +125,8 @@ public class DataSeederDespesa : ISeeder
         if (vencimento.Month != month.Month)
             vencimento = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
 
-        decimal valor = Math.Round((decimal)(_random.NextDouble() * 1000 + 10), 2);
+        decimal despesa = Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
+        decimal valor = Math.Round(despesa, 2);
 
         Guid categoriaId;
         if (!categorias.TryGetValue(item.Categoria, out categoriaId))
