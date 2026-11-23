@@ -1,7 +1,7 @@
 ﻿using Application.Authentication;
+using Application.Authentication.Abstractions;
 using Business.Authentication.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
@@ -10,7 +10,10 @@ namespace WebApi.CommonDependenceInject;
 
 public static class AutorizationDependenceInject
 {
-    private static readonly string[] ALLOWED_ORIGINGS = {
+    private const string AUTHORIZATION_POLICY = "Bearer";
+
+    private static readonly string[] ALLOWED_ORIGINS =
+    {
         "https://alexfariakof.com",
         "https://localhost",
         "https://localhost:42535",
@@ -27,7 +30,7 @@ public static class AutorizationDependenceInject
         {
             options.AddDefaultPolicy(policy =>
             {
-                policy.WithOrigins(ALLOWED_ORIGINGS)
+                policy.WithOrigins(ALLOWED_ORIGINS)
                       .AllowAnyMethod()
                       .AllowAnyHeader()
                       .AllowCredentials();
@@ -37,67 +40,58 @@ public static class AutorizationDependenceInject
 
     public static void AddSigningConfigurations(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenConfigurations"));
-        var options = builder.Services.BuildServiceProvider().GetService<IOptions<TokenOptions>>();
-        var certificate = LoadCertificate(options);
+        builder.Services.Configure<TokenOptions>(
+            builder.Configuration.GetSection("TokenConfigurations"));
 
-        var signingConfigurations = new SigningConfigurations(certificate, options);
-        builder.Services.AddSingleton<SigningConfigurations>(signingConfigurations);
-
-        if (builder.Environment.IsProduction())
+        builder.Services.AddSingleton<X509Certificate2?>(provider =>
         {
-            builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                serverOptions.ConfigureHttpsDefaults(httpsOptions =>
-                {
-                    httpsOptions.ServerCertificate = certificate;
-                });
-            });
-        }
+            var options = provider.GetRequiredService<IOptions<TokenOptions>>();
+
+            return CertificateLoader.Load(options);
+        });
+
+        builder.Services.AddSingleton<SigningConfigurations>();
+
+        builder.Services.AddSingleton<ISigningConfigurations>(
+            provider => provider.GetRequiredService<SigningConfigurations>());
     }
 
     public static void AddAuthenticationConfigurations(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication(authOptions =>
-        {
-            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(bearerOptions =>
-        {
-            var options = builder.Services.BuildServiceProvider().GetService<IOptions<TokenOptions>>();
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
 
-            bearerOptions.TokenValidationParameters = new TokenValidationParameters
+        builder.Services
+            .AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+            .Configure<ISigningConfigurations, IOptions<TokenOptions>>(
+                (options, signingConfigurations, tokenOptions) =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = signingConfigurations.Key,
+
+                        ValidIssuer = tokenOptions.Value.Issuer,
+                        ValidAudience = tokenOptions.Value.Audience,
+
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(AUTHORIZATION_POLICY, policy =>
             {
-                IssuerSigningKey = builder.Services.BuildServiceProvider().GetService<SigningConfigurations>().Key,
-                ValidAudience = options.Value.Audience,
-                ValidIssuer = options.Value.Issuer,
-                ValidateIssuerSigningKey = true,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
+                policy.AddAuthenticationSchemes(
+                    JwtBearerDefaults.AuthenticationScheme);
+
+                policy.RequireAuthenticatedUser();
+            });
         });
-
-        builder.Services.AddAuthorization(auth =>
-        {
-            auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​).RequireAuthenticatedUser().Build());
-        });
-    }
-
-    private static X509Certificate2? LoadCertificate(IOptions<TokenOptions>? options)
-    {
-        if (options?.Value == null || string.IsNullOrWhiteSpace(options.Value.Certificate))
-            return null;
-
-        string certificatePath = Path.Combine(AppContext.BaseDirectory, options.Value.Certificate);
-
-        if (!File.Exists(certificatePath))
-            return null;
-
-        return X509CertificateLoader.LoadPkcs12FromFile(
-            certificatePath,
-            options.Value.Password ?? string.Empty,
-            X509KeyStorageFlags.Exportable | X509KeyStorageFlags.MachineKeySet
-        );
     }
 }
