@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -8,7 +9,8 @@ PREREQS=()
 
 # Tarefas padrão (sem duplicar o que está em PREREQS)
 DEFAULT_TASKS=(
-    setup-codex
+    setup-dev-certs
+    setup-codex    
 )
 
 log() {
@@ -60,8 +62,7 @@ main() {
         tasks=("${DEFAULT_TASKS[@]}")
     fi
 
-    acquire_lock
-
+    acquire_lock    
     # Não deixa falha de certificado derrubar o container
     aspire certs trust || log "⚠️ Falha ao confiar no certificado (seguindo)"
 
