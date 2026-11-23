@@ -33,13 +33,6 @@
 		<ProjectReference Include="..\migrations\DataSeeders\Migrations.DataSeeders.csproj" />
 		<ProjectReference Include="..\src\Application\Application.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<Content Include="certificate\webapi-cert.pfx">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
 
 
 </Project>
