@@ -1,13 +1,14 @@
-﻿using AutoMapper;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
 using Application.Implementations;
-using GlobalException.CustomExceptions.Core;
-using Repository.UnitOfWork.Abstractions;
+using AutoMapper;
 using Domain.Core.ValueObject;
 using Domain.Entities;
+using GlobalException.CustomExceptions.Core;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Repository.Persistency.Generic;
+using Repository.UnitOfWork.Abstractions;
 using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 
@@ -24,7 +25,7 @@ public sealed class UsuarioBusinessImplTest
     {
         _repositorioMock = new Mock<IRepositorio<Usuario>>();
         _unitOfWork = new Mock<IUnitOfWork<Usuario>>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }, NullLoggerFactory.Instance));
         _usuarioBusiness = new UsuarioBusinessImpl<UsuarioDto>(_mapper, _repositorioMock.Object, _unitOfWork.Object);
         _usuarios = UsuarioFaker.Instance.GetNewFakersUsuarios();
     }

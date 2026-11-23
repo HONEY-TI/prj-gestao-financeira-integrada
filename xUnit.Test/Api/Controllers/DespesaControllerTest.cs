@@ -1,9 +1,10 @@
-﻿using AutoMapper;
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.Dtos;
-using WebApi.Controllers;
+using AutoMapper;
 using GlobalException.CustomExceptions.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using WebApi.Controllers;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Api.Controllers;
@@ -18,7 +19,7 @@ public sealed class DespesaControllerTest
     {
         _mockDespesaBusiness = new Mock<IBusinessBase<DespesaDto, Despesa>>();
         _despesaController = new DespesaController(_mockDespesaBusiness.Object);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }, NullLoggerFactory.Instance));
     }
 
     [Fact]

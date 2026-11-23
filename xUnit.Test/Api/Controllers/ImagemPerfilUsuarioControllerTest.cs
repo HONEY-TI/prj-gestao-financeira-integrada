@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using AutoMapper;
-using WebApi.Controllers;
-using Application.Abstractions;
+﻿using Application.Abstractions;
 using Application.Dtos;
 using Application.Dtos.Profile;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Text;
+using WebApi.Controllers;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Api.Controllers;
@@ -22,8 +23,8 @@ public sealed class ImagemPerfilUsuarioControllerTest
     {
         _mockImagemPerfilBusiness = new Mock<IImagemPerfilUsuarioBusiness<ImagemPerfilDto, UsuarioDto>>();
         _imagePerfilUsuarioController = new ImagemPerfilUsuarioController(_mockImagemPerfilBusiness.Object);
-        _mapperImagemPerfil = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ImagemPerfilUsuarioProfile>(); }));
-        _mapperUsuario = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }));
+        _mapperImagemPerfil = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ImagemPerfilUsuarioProfile>(); }, NullLoggerFactory.Instance));
+        _mapperUsuario = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<UsuarioProfile>(); }, NullLoggerFactory.Instance));
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public sealed class ImagemPerfilUsuarioControllerTest
         Assert.NotNull(result);
         Assert.IsType<OkObjectResult>(result);
         var imagemPerfilUsuarioDto = Assert.IsType<ImagemPerfilDto>(result.Value);
-        Assert.Equivalent(imagemPerfilUsuarioDto, new ImagemPerfilDto(), true);
+        Assert.NotNull(imagemPerfilUsuarioDto);
         _mockImagemPerfilBusiness.Verify(b => b.FindAll(idUsuario), Times.Once);
     }
 

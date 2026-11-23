@@ -23,7 +23,7 @@ var host = Host.CreateDefaultBuilder(args)
         if (string.IsNullOrEmpty(cryptoKey) || string.IsNullOrEmpty(cryptoAuthSalt))
             throw new Exception("CryptoConfigurations não encontradas no App.config.");
 
-        var inMemoryConfig = new Dictionary<string, string>
+        var inMemoryConfig = new Dictionary<string, string?>
         {
             { "CryptoConfigurations:Key", cryptoKey },
             { "CryptoConfigurations:AuthSalt", cryptoAuthSalt }

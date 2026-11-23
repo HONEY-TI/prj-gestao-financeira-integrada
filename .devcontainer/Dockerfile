@@ -8,69 +8,28 @@ ENV WORKSPACE=${WORKSPACE}
 # =============================================================================
 # STEP 1 - Ambiente
 # =============================================================================
-
 ENV DEBIAN_FRONTEND=noninteractive
-#ENV HOME=/home/ubuntu
-#ENV UBUNTU_ROOT=/usr/share/ubuntu
-#ENV PATH="/home/ubuntu/.dotnet/tools:/home/ubuntu/.npm-global/bin:/home/ubuntu/.local/bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
 
 # =============================================================================
 # STEP 2 - Pacotes do sistema
 # =============================================================================
-
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        python3 \
-        xterm \
-        iptables \
-        ipset \
-        iproute2 \
-        iputils-ping \
-        dnsutils \
-        aggregate \
-        gh \
-        openssh-client \
-        openssh-server \
-        jq \
-        procps \
-        xdg-utils \
         xauth \
+        wl-clipboard \
         xclip \
         xsel \
         bubblewrap \
-        wget \
+        jq \
+        apt-utils \
+        libnss3-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# =============================================================================
-# STEP 3 - Diretórios do usuário ubuntu
-# =============================================================================
-RUN mkdir -p \
-        /home/${USERNAME}/.${USERNAME}/tools \
-        /home/${USERNAME}/.npm-global \
-        /home/${USERNAME}/.ssh \
-        /home/${USERNAME}/.config \
-        /home/${USERNAME}/.cache \
-        /home/${USERNAME}/.local/bin 
-
-# =============================================================================
-# STEP 4 - Antigravity
-# =============================================================================
-#USER ${USERNAME}
-RUN wget -qO /tmp/agy-install.sh https://antigravity.google/cli/install.sh \
-  && bash /tmp/agy-install.sh \
-  && rm -f /tmp/agy-install.sh
-#USER root
-
-# =============================================================================
-# STEP 5 - Codex
-# =============================================================================
 RUN git lfs install --system
-RUN npm install -g @openai/codex@latest --include=optional \
-    && codex --version
 
 # =============================================================================
-# STEP 6 - SSH
+# STEP 3 - SSH
 # =============================================================================
 RUN mkdir -p /home/${USERNAME}/.ssh \
     && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.ssh \
@@ -81,46 +40,71 @@ RUN mkdir -p /home/${USERNAME}/.vscode-server  \
     && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.vscode-server  \
     && chmod 700 /home/${USERNAME}/.vscode-server 
 
+# =============================================================================
+# STEP 4 Scripts de configuração
+# =============================================================================
+COPY .devcontainer/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY .devcontainer/setup /usr/local/bin/setup
+COPY .devcontainer/tools /usr/local/bin/tools
 
-# Scripts de configuração do SSH server (executados via postStartCommand do
-# devcontainer, NÃO via ENTRYPOINT — ver docs/ssh-access.md)
-COPY .devcontainer/scripts/start-ssh.sh /usr/local/sbin/start-ssh.sh
-COPY .devcontainer/scripts/setup-ssh.sh /usr/local/sbin/setup-ssh.sh
-COPY .devcontainer/scripts/setup-codex.sh /usr/local/sbin/setup-codex.sh
-RUN chmod +x /usr/local/sbin/setup-ssh.sh /usr/local/sbin/start-ssh.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/setup/*.sh \
+    && chmod +x /usr/local/bin/tools/*.sh
+ENV PATH="/usr/local/bin/tools:${PATH}"
+ENV PATH="/usr/local/bin/setup:${PATH}"
 
 # =============================================================================
-# STEP 7 - Permissões 
+#  STEP 5 - Permissões 
 # =============================================================================
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/sbin/start-ssh.sh, /usr/local/sbin/setup-codex.sh" \
+RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/bin/tools/tool-install.sh,  /usr/local/bin/setup/start.sh \
+    /usr/local/bin/open-user-shell.sh" \
     > /etc/sudoers.d/${USERNAME}-dev \
     && chmod 0440 /etc/sudoers.d/${USERNAME}-dev
 
+# =========================================================
+# STEP 6 - DOTNET RUN — AUTO LAUNCH PROFILE
+# =========================================================
 
-# =============================================================================
-# 📌 false = DESATIVADO | true = ATIVADO
-# =============================================================================
-ARG ENABLE_SWITCH_USER=true
-ENV ENABLE_SWITCH_USER=${ENABLE_SWITCH_USER}
+RUN cat >> /home/${USERNAME}/.bashrc <<'EOF'
 
-RUN if [ "$ENABLE_SWITCH_USER" = "true" ]; then \
-        echo "🔄 Configurando auto switch: root ➜ ubuntu"; \
-        printf '%s\n' \
-            'if [ "${AUTO_SWITCHED}" != "1" ]; then' \
-            '    export AUTO_SWITCHED=1' \
-            '    exec su - ubuntu' \
-            'fi' \
-            > /root/.switch_user; \
-        echo "source /root/.switch_user" >> /root/.bashrc; \
-        echo "source /root/.switch_user" >> /root/.bash_profile; \
-        echo ". /root/.switch_user" >> /root/.profile; \
-    else \
-        echo "⏭️  Auto switch root ➜ ubuntu: DESATIVADO"; \
+function dotnet() {
+    local cmd="$1"
+    local project="$2"
+    local PROFILE
+
+    if [[ "$cmd" == "run" ]]; then
+        case "$(uname -s)" in
+            MINGW*|MSYS*|CYGWIN*|Windows_NT)
+                PROFILE="https"
+                ;;
+            Linux|Darwin)
+                PROFILE="https-container"
+                ;;
+            *)
+                echo "Unsupported operating system: $(uname -s)"
+                return 1
+                ;;
+        esac
+
+        [[ -z "$project" || "$project" == "AppHost" ]] && project="AppHost"
+
+        echo "Starting $project with profile: $PROFILE"
+
+        command dotnet restore 
+        command dotnet run \
+            --launch-profile "$PROFILE" \
+            --project "$project" \
+            "${@:3}"
+    else
+        command dotnet "$@"
     fi
+}
+EOF
 
-# =============================================================================
-# execução
-# =============================================================================
+RUN chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc
+RUN sudo useradd -D -s /bin/bash
+RUN dotnet workload update
+
 WORKDIR ${WORKSPACE}
 ENTRYPOINT ["docker-entrypoint.sh"]

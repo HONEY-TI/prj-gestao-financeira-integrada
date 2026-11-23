@@ -90,12 +90,12 @@ public sealed class Usings
             Issuer = "testIssuer",
             Audience = "testAudience",
             Seconds = 30,
-            Certificate = "certificate/webapi-cert.pfx",
-            Password = "12345!"
+            CertificatePath = "certificate/webapi-cert.pfx",
+            PrivateKeyPath = "12345!"
         });
 
-        string certificatePath = Path.Combine(AppContext.BaseDirectory, options.Value.Certificate);
-        return new X509Certificate2(certificatePath, options.Value.Password, X509KeyStorageFlags.Exportable | X509KeyStorageFlags.MachineKeySet);
+        string certificatePath = Path.Combine(AppContext.BaseDirectory, options.Value.CertificatePath);
+        return new X509Certificate2(certificatePath, options.Value.PrivateKeyPath, X509KeyStorageFlags.Exportable | X509KeyStorageFlags.MachineKeySet);
     }
 
     public static string GenerateJwtToken(Guid userId)

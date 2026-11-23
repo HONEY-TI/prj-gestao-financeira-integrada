@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
 using Application.Implementations;
+using AutoMapper;
 using GlobalException.CustomExceptions;
-using Repository.UnitOfWork.Abstractions;
+using Microsoft.Extensions.Logging.Abstractions;
 using Repository.Persistency.Generic;
+using Repository.UnitOfWork.Abstractions;
 using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 
@@ -23,7 +24,7 @@ public sealed class ReceitaBusinessImplTest
         _repositorioMock = new Mock<IRepositorio<Receita>>();
         _unitOfWork = new Mock<IUnitOfWork<Receita>>();
         _unitOfWorkCategoria = new Mock<IUnitOfWork<Categoria>>(MockBehavior.Default);
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<ReceitaProfile>(); }, NullLoggerFactory.Instance));
         _receitaBusiness = new ReceitaBusinessImpl<ReceitaDto>(_mapper, _repositorioMock.Object, _unitOfWork.Object, _unitOfWorkCategoria.Object);
     }
 

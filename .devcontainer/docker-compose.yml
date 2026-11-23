@@ -1,32 +1,44 @@
 #ssh -T github-alexfaria # ssh -T gitlab-alexfaria
 services:
-  dotnet-devcontainer:
-    container_name: dotnet-devcontainer
-    image: dotnet-devcontainer:latest
-    tty: true
-    stdin_open: true    
+  prj-gestao-integrada:
+    container_name: prj-gestao-integrada
+    image: prj-gestao-integrada:latest
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       "args": { "USERNAME": "ubuntu", "ENABLE_SWITCH_USER", "true" }
+    secrets:
+      - env      
+#    env_file:
+#      - .env
     environment:
       NODE_OPTIONS: "--max-old-space-size=4096"
       GITHUB_TOKEN: ${GITHUB_TOKEN:?GITHUB_TOKEN não definido no .env}
       XAUTHORITY: /tmp/.xauth-devc
-    env_file:
-      - .env
+      DOTNET_GCHeapHardLimitPercent: "50"
+      UV_THREADPOOL_SIZE: "6"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 6G
+        reservations:
+          cpus: "2.0"
+          memory: 2G
+    memswap_limit: 6G
     volumes:
-      - ../:/workspace:rw
-      - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:rw
-      - dotnet-node-modules:/workspace/frontend/node_modules:rw 
+      - ../:/workspace:cached
+      - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:cached
+      - dotnet-node-modules:/workspace/frontend/node_modules:cached 
+      - shell_history-shared:/home/ubuntu/shell_history:cached 
     ports:
-      - 7309:7309
-      - 5488:5488
-      - 17015:17015
-      - 15183:15183
-      - 46233:46233
-      - 41555:41555
-      - 35923:35923
+      - "17016:17015"
+      - "7310:7309"
+      - "5489:5488"
+      - "15184:15183"
+      - "46234:46233"
+      - "41556:41555"
+      - "35924:35923"
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -37,26 +49,27 @@ services:
     command: sleep infinity
     networks:
       - dotnet-network
+      - redis-network
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "1"
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-          cpus: '2'
-        reservations:
-          memory: 2G
-          cpus: '1'        
 
+secrets:
+  env:
+    file: .env
+    
 volumes:
   vscode-extensions-shared:
     external: true
   dotnet-node-modules:
     external: true
+  shell_history-shared:
+    external: true
 
 networks:
   dotnet-network:
+    external: true
+  redis-network:
     external: true

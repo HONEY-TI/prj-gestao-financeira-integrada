@@ -1,6 +1,6 @@
 ﻿using Business.Authentication.Abstractions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Application.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,8 +18,8 @@ public sealed class SigningConfigurationsTest
             Issuer = "testIssuer",
             Audience = "testAudience",
             Seconds = 30,
-            Certificate = "certificate/webapi-cert.pfx",
-            Password = "12345T!"
+            CertificatePath = "certificate/webapi-cert.pfx",
+            PrivateKeyPath = "12345T!"
         });
     }
 

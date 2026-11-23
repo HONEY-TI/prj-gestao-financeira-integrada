@@ -1,6 +1,7 @@
 ﻿using Repository.Mapping.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using xUnit.Test.__mock__.Repository;
+using Repository.Persistency.Generic;
 
 namespace xUnit.Test.Repository.Persistency.Generic;
 public sealed class GenericRepositorioTest

@@ -1,5 +1,6 @@
-﻿using AutoMapper;
-using Application.Dtos.Profile;
+﻿using Application.Dtos;
+using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Dtos;
@@ -11,7 +12,7 @@ public sealed class CategoriaDtoTest
     public void CategoriaDto_Should_Set_Properties_Correctly()
     {
         // Arrange        
-        var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }));        
+        var mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<CategoriaProfile>(); }, NullLoggerFactory.Instance));        
 
         // Act
         var categoria = CategoriaFaker.Instance.Categorias().First();

@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using Application.Dtos;
 using Application.Dtos.Profile;
+using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using xUnit.Test.__mock__.Entities;
 
 namespace xUnit.Test.Application.Dtos;
@@ -12,7 +14,7 @@ public sealed class ReceitaDtoTest
         // Arrange
         var mapper = new Mapper(new MapperConfiguration(cfg => {
             cfg.AddProfile<ReceitaProfile>();
-        }));
+        }, NullLoggerFactory.Instance));
 
         // Act
         var receita = ReceitaFaker.Instance.Receitas().First();

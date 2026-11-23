@@ -16,15 +16,19 @@ public class DataSeederReceita : ISeeder
 
     public void Insert()
     {
-        SeedInternal(isInsert: true);
+        SeedInternal(isInsert: true, 2024);
+        SeedInternal(isInsert: true, 2025);
+        SeedInternal(isInsert: true, 2026);
     }
 
     public void Seed()
     {
-        SeedInternal(isInsert: false);
+        SeedInternal(isInsert: false, 2024);
+        SeedInternal(isInsert: false, 2025);
+        SeedInternal(isInsert: false, 2026);
     }
 
-    private void SeedInternal(bool isInsert)
+    private void SeedInternal(bool isInsert, int anoDados)
     {
         var user = _context.Usuario.FirstOrDefault(u => u.Nome.Contains("Teste"));
         if (user == null) return;
@@ -47,8 +51,6 @@ public class DataSeederReceita : ISeeder
             ("Freelance", "Outros", 500m)
         };
 
-        // Dados fictícios para todos os meses de janeiro a dezembro.
-        const int anoDados = 2026;
         var startDate = new DateTime(anoDados, 1, 1);
         var endDate = new DateTime(anoDados, 12, 31);
 
@@ -69,6 +71,8 @@ public class DataSeederReceita : ISeeder
 
                 if (existing != null)
                 {
+                    decimal randon= Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
+                    receita.Valor = Math.Round(randon, 2);
                     existing.Valor = receita.Valor;
                 }
                 else
@@ -111,7 +115,8 @@ public class DataSeederReceita : ISeeder
         int day = _random.Next(1, DateTime.DaysInMonth(month.Year, month.Month) + 1);
         var data = new DateTime(month.Year, month.Month, day);
 
-        decimal valor = Math.Round(item.Valor * (decimal)(0.9 + _random.NextDouble() * 0.2), 2); // ±10% aleatório
+        decimal receita = Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
+        decimal valor = Math.Round(receita, 2);
 
         Guid categoriaId;
         if (!categorias.TryGetValue(item.Categoria, out categoriaId))

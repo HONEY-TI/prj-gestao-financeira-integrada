@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Implementations;
-using GlobalException.CustomExceptions;
-using Repository.UnitOfWork.Abstractions;
+using AutoMapper;
 using Domain.Core.ValueObject;
+using GlobalException.CustomExceptions;
+using Microsoft.Extensions.Logging.Abstractions;
 using Repository.Persistency.Generic;
+using Repository.UnitOfWork.Abstractions;
 using System.Linq.Expressions;
 using xUnit.Test.__mock__.Entities;
 
@@ -23,7 +24,7 @@ public sealed class DespesaBusinessImplTest
         _unitOfWork = new Mock<IUnitOfWork<Despesa>>(MockBehavior.Default);
         _unitOfWorkCategoria = new Mock<IUnitOfWork<Categoria>>(MockBehavior.Default);
         _repositorioMock = new Mock<IRepositorio<Despesa>>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }));
+        _mapper = new Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<DespesaProfile>(); }, NullLoggerFactory.Instance));
         _despesaBusiness = new DespesaBusinessImpl<DespesaDto>(_mapper, _repositorioMock.Object, _unitOfWork.Object, _unitOfWorkCategoria.Object);
     }
 
