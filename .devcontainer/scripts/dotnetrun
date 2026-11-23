@@ -1,0 +1,37 @@
+#!/bin/bash
+
+function dotnet() {
+    local cmd="$1"
+    local project="$2"
+    local PROFILE
+
+    if [[ "$cmd" == "run" ]]; then
+
+        case "$(uname -s)" in
+            MINGW*|MSYS*|CYGWIN*|Windows_NT)
+                PROFILE="https"
+                ;;
+            Linux|Darwin)
+                PROFILE="https-container"
+                ;;
+            *)
+                echo "Unsupported operating system: $(uname -s)"
+                return 1
+                ;;
+        esac
+
+        if [[ -z "$project" || "$project" == "AppHost" ]]; then
+            project="AppHost"
+        fi
+
+        echo "Starting $project with profile: $PROFILE"
+
+        command dotnet run \
+            --launch-profile "$PROFILE" \
+            --project "$project" \
+            "${@:3}"
+
+    else
+        command dotnet "$@"
+    fi
+}
