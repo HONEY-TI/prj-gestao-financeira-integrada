@@ -11,7 +11,6 @@ var server = builder
     .WaitFor(cache)
     .WithExternalHttpEndpoints();
 
-
 // Health / Swagger resources
 builder.AddServerHealthResources(
     server,
