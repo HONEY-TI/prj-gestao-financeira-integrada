@@ -22,7 +22,7 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 | --------------------- | ------------------ |
 | 🌿 Branch de origem   | `feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento` |
 | 🎯 Branch de destino  | `develop`          |
-| 📝 Total de commits   | 223                |
+| 📝 Total de commits   | 225                |
 | 📁 Arquivos alterados | 192                |
 
 ---
@@ -30,7 +30,7 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 ## 📦 Repositórios/branches atualizados
 
 - **[prj-gestao-financeira-integrada](https://github.com/HONEY-TI/prj-gestao-financeira-integrada)** — branch [`feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento`](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/tree/feature/reorganizar-estrutura-da-aplicacao-e-ambiente-de-desenvolvimento)
-  - Commits: 221 (excluindo o `chore: iniciar feature` vazio)
+  - Commits: 224 (excluindo o `chore: iniciar feature` vazio)
   - Arquivos alterados: 192 — reorganização da estrutura .NET/Aspire, ambiente DevContainer/Docker, automações de build/cobertura, suíte de testes xUnit e frontend Angular/Capacitor
 
 ---
@@ -268,3 +268,4 @@ Feature relacionada: `.backlog/features/feature-01-reorganizar-estrutura-da-apli
 - fix(.devcontainer): devcontainer `.devcontainer/devcontainer.json` - 8fde2e8
 - fix(.devcontainer): aspire.config `.devcontainer/aspire.config.json` - 1c7082e
 - fix(.devcontainer): dockerfile `.devcontainer/Dockerfile, prj-estacio-despesas-pessoais.slnx` - c589ec6
+- fix(.devcontainer): dockerfile `.devcontainer/Dockerfile` - 40b3d32
