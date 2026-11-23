@@ -13,7 +13,6 @@
     <Project Path="src/Repository/Repository.csproj" />
   </Folder>
   <Folder Name="/.devcontainer/">
-    <File Path=".devcontainer/aspire.config.json" />
     <File Path=".devcontainer/devcontainer.json" />
     <File Path=".devcontainer/DespesasRefatorado.AppHost/AppHost.cs" />
     <File Path=".devcontainer/DespesasRefatorado.AppHost/appsettings.Development.json" />
