@@ -1,4 +1,3 @@
-
 using Application.CommonDependenceInject;
 using CrossCutting.CommonDependenceInject;
 using GlobalException.CommonDependenceInject;
@@ -16,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // ============================================================
 
 builder.AddServiceDefaults();
-
 builder.AddRedisClientBuilder("cache")
     .WithDistributedCache()
     .WithOutputCache();
@@ -24,7 +22,6 @@ builder.AddRedisClientBuilder("cache")
 // ============================================================
 // SERVIÇOS
 // ============================================================
-
 builder.Services
     .AddProblemDetails()
     .AddOpenApi()
@@ -40,6 +37,10 @@ builder.AddCORSConfigurations();
 // PERSISTÊNCIA
 // ============================================================
 
+// InMemory
+builder.Services.ConfigureInMemoryServerContext(
+    builder.Configuration);
+
 // Oracle
 // builder.Services.ConfigureOracleServerMigrationsContext(
 //     builder.Configuration);
@@ -52,14 +53,11 @@ builder.AddCORSConfigurations();
 // builder.Services.ConfigureMySqlServerContext(
 //     builder.Configuration);
 
-// InMemory
-builder.Services.ConfigureInMemoryServerContext(
-    builder.Configuration);
+
 
 // ============================================================
 // SEGURANÇA
 // ============================================================
-
 builder.AddSigningConfigurations();
 builder.AddAuthenticationConfigurations();
 
@@ -69,7 +67,6 @@ builder.Services.AddServicesCryptography(
 // ============================================================
 // INJEÇÃO DE DEPENDÊNCIAS
 // ============================================================
-
 builder.Services.AddApplicationAutoMapper();
 builder.Services.AddAmazonS3BucketConfigurations(builder.Configuration);
 builder.Services.AddRepositories();
@@ -80,27 +77,22 @@ builder.Services.AddDataSeeders();
 // ============================================================
 // HEALTH CHECKS
 // ============================================================
-
 builder.AddHealthCheckConfigurations();
 
 // ============================================================
 // APLICAÇÃO
 // ============================================================
-
 var app = builder.Build();
 
 // ============================================================
 // MIDDLEWARES
 // ============================================================
-
 app.UseGlobalExceptionHandler();
-
 app.UseApplicationConfiguration();
 
 // ============================================================
 // ENDPOINTS
 // ============================================================
-
 app.MapApplicationEndpoints();
 app.MapGet("/api/teste/redis", async (Microsoft.Extensions.Caching.Distributed.IDistributedCache c) =>
 {
