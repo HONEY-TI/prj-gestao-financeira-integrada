@@ -1,3 +1,21 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-*.sh text eol=lf
+# Normaliza todos os arquivos de texto para LF (no repositório e no working tree)
+* text=auto eol=lf
+
+# Arquivos que precisam de CRLF no Windows (únicas exceções)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Arquivos binários (nunca converter)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.dll binary
+*.exe binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
