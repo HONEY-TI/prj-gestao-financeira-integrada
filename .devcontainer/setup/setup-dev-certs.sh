@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # =============================================================================
 # setup-dev-certs.sh
 # Configura o certificado HTTPS de desenvolvimento usando apenas `dotnet dev-certs`.
