@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Prepara o Codex dentro do container:
 #   1. valida o ambiente
