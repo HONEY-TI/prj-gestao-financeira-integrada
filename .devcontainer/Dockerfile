@@ -8,13 +8,11 @@ ENV WORKSPACE=${WORKSPACE}
 # =============================================================================
 # STEP 1 - Ambiente
 # =============================================================================
-
 ENV DEBIAN_FRONTEND=noninteractive
 
 # =============================================================================
 # STEP 2 - Pacotes do sistema
 # =============================================================================
-
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         xauth \
@@ -23,6 +21,8 @@ RUN apt-get update \
         xsel \
         bubblewrap \
         jq \
+        apt-utils \
+        libnss3-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -104,6 +104,7 @@ EOF
 
 RUN chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc
 RUN sudo useradd -D -s /bin/bash
+RUN dotnet workload update
 
 WORKDIR ${WORKSPACE}
 ENTRYPOINT ["docker-entrypoint.sh"]
