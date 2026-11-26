@@ -5,7 +5,7 @@ title: "PR(#2)-hotix"
 branch: feature/hotix
 base: develop
 extends: feature-02-hotix
-status: draft
+status: open
 ---
 
 ## 📋 Descrição
