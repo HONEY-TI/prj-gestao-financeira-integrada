@@ -7,10 +7,10 @@
     "app-android"
   ],
   "scripts": {
-    "start": "NG_FORCE_TTY=false ng serve --configuration production",
-    "dev": "cross-env-shell \"ng serve --port $PORT\"",
-    "build": "NG_FORCE_TTY=false ng build --configuration production",
-    "build:dev": "NG_FORCE_TTY=false ng build --configuration development",
+ "start": "cross-env NG_FORCE_TTY=false ng serve --configuration production",
+    "dev": "cross-env NG_FORCE_TTY=false cross-env-shell \"ng serve --port $PORT\"",
+    "build": "cross-env NG_FORCE_TTY=false ng build --configuration production",
+    "build:dev": "cross-env NG_FORCE_TTY=false ng build --configuration development",
     "lint": "eslint .",
     "watch": "NG_FORCE_TTY=false ng build --watch --configuration development",
     "test": "set BROWSER=ChromeHeadless && ng test --browsers=ChromeHeadless --no-watch",
