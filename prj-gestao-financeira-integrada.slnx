@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path="add-devcontainer-to-sln.ps1" />
+    <File Path="warn-frontend.md" />
   </Folder>
   <Folder Name="/src/">
     <File Path="Server/.editorconfig" />
