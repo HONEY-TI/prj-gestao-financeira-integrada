@@ -5,12 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Repository.Persistency.Abstractions;
 using Repository.Persistency.Generic;
 using Repository.Persistency.Implementations;
+using Repository.Mapping.Abstractions;
 
 namespace Repository.CommonDependenceInject;
 public static class RepositoryDependenceInject
 {
     public static void CreateDataBaseInMemory(this IServiceCollection services)
     {
+        services.Add(new ServiceDescriptor(typeof(DatabaseProvider), DatabaseProvider.InMemory));
         services.AddDbContext<RegisterContext>(c => c.UseInMemoryDatabase("Register"));
     }
 

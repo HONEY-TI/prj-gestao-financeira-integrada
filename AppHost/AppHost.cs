@@ -1,9 +1,11 @@
-using Microsoft.Extensions.DependencyInjection;
 using AppHost.resources;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var cache = builder.AddRedis("cache");
+//var cache = builder.AddRedis("cache");
+var cache = builder.AddRedisCache("cache",
+    new ExternalRedisSettings(ConnectionString: "redis://default:redis@redis-cache:6379"),
+    useExternalByDefault: true);
 
 var server = builder
     .AddProject<Projects.AppServer>("server")

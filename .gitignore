@@ -53,14 +53,14 @@ libpeerconnection.log
 # =========================================================
 # 🟢 NODE / ANGULAR
 # =========================================================
-node_modules/
-/dist/
-/dist-ssr/
-/tmp/
-/out-tsc/
-/bazel-out/
-/coverage/
-/.angular/
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+**/coverage/
+**.angular/
 .angular/
 .nx/
 .cache/

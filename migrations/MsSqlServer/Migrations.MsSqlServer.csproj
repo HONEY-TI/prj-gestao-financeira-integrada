@@ -34,10 +34,4 @@
 		<ProjectReference Include="..\..\src\Application\Application.csproj" />
 		<ProjectReference Include="..\DataSeeders\Migrations.DataSeeders.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\.editorconfig" Link=".editorconfig">
-			<DependentUpon>$(MSBuildProjectDirectory)</DependentUpon>
-		</None>
-	</ItemGroup>
 </Project>

@@ -31,65 +31,64 @@ public class DataSeederDespesa : ISeeder
 
     private void SeedInternal(bool isInsert, int anoDados)
     {
-        var user = _context.Usuario.FirstOrDefault(u => u.Nome.Equals("Teste"));
-        if (user == null) return;
-
-        var categorias = _context.Categoria
-            .Where(c => c.UsuarioId == user.Id)
-            .ToList()
-            .GroupBy(c => c.Descricao)
-            .ToDictionary(g => g.Key, g => g.First().Id);
-
-        if (categorias.Count == 0)
-            return;
-
-        var despesasBase = new List<(string Descricao, string Categoria)>
+        foreach (var user in _context.Usuario.ToList())
         {
-            ("Conta de Luz", "Casa"),
-            ("Compra de mantimentos", "Casa"),
-            ("Serviço de Limpeza", "Serviços"),
-            ("Consulta Médica", "Saúde"),
-            ("Imposto de Renda", "Imposto"),
-            ("Passagem de Ônibus", "Transporte"),
-            ("Cinema", "Lazer"),
-            ("Outros gastos", "Outros"),
-            ("Compra de roupas", "Casa"),
-            ("Serviço de manutenção", "Serviços")
-        };
+            var categorias = _context.Categoria
+                .Where(c => c.UsuarioId == user.Id
+                    && c.TipoCategoriaId == (int)Domain.Core.ValueObject.TipoCategoria.CategoriaType.Despesa)
+                .ToList()
+                .GroupBy(c => c.Descricao)
+                .ToDictionary(g => g.Key, g => g.First().Id);
 
-        var startDate = new DateTime(anoDados, 1, 1);
-        var endDate = new DateTime(anoDados, 12, 31);
+            if (categorias.Count == 0)
+                continue;
 
-        var despesas = GenerateDespesas(user, categorias, despesasBase, startDate, endDate);
-
-        foreach (var despesa in despesas)
-        {
-            if (isInsert)
+            var despesasBase = new List<(string Descricao, string Categoria)>
             {
-                _context.Add(despesa);
-            }
-            else
-            {
-                var existing = _context.Despesa.FirstOrDefault(d =>
-                    d.Descricao == despesa.Descricao &&
-                    d.UsuarioId == despesa.UsuarioId &&
-                    d.Data == despesa.Data);
+                ("Conta de Luz", "Casa"),
+                ("Compra de mantimentos", "Casa"),
+                ("Serviço de Limpeza", "Serviços"),
+                ("Consulta Médica", "Saúde"),
+                ("Imposto de Renda", "Imposto"),
+                ("Passagem de Ônibus", "Transporte"),
+                ("Cinema", "Lazer"),
+                ("Outros gastos", "Outros"),
+                ("Compra de roupas", "Casa"),
+                ("Serviço de manutenção", "Serviços")
+            };
 
-                if (existing != null)
-                {
-                    decimal randon = Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
-                    despesa.Valor = Math.Round(randon, 2);
-                    existing.Valor = despesa.Valor;
-                    existing.DataVencimento = despesa.DataVencimento;
-                }
-                else
+            var startDate = new DateTime(anoDados, 1, 1);
+            var endDate = new DateTime(anoDados, 12, 31);
+
+            var despesas = GenerateDespesas(user, categorias, despesasBase, startDate, endDate);
+
+            foreach (var despesa in despesas)
+            {
+                if (isInsert)
                 {
                     _context.Add(despesa);
                 }
-            }
-        }
+                else
+                {
+                    var existing = _context.Despesa.FirstOrDefault(d =>
+                        d.Descricao == despesa.Descricao &&
+                        d.UsuarioId == despesa.UsuarioId &&
+                        d.Data == despesa.Data);
 
-        _context.SaveChanges();
+                    if (existing != null)
+                    {
+                        existing.Valor = despesa.Valor;
+                        existing.DataVencimento = despesa.DataVencimento;
+                    }
+                    else
+                    {
+                        _context.Add(despesa);
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+        }
     }
 
     private List<Despesa> GenerateDespesas(

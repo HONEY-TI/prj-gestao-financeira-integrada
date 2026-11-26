@@ -7,6 +7,8 @@
       "launchBrowser": true,
       "applicationUrl": "https://prj-gestao-financeira-integrada.dev.localhost:17015;http://prj-gestao-financeira-integrada.dev.localhost:15183",
       "environmentVariables": {
+        "DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS": "true",
+        "RUNNING_IN_DEVCONTAINER": "false",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21209",
@@ -19,6 +21,8 @@
       "launchBrowser": true,
       "applicationUrl": "http://prj-gestao-financeira-integrada.dev.localhost:15183",
       "environmentVariables": {
+        "DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS": "true",
+        "RUNNING_IN_DEVCONTAINER": "false",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19031",
@@ -31,6 +35,8 @@
       "launchBrowser": true,
       "applicationUrl": "https://prj-gestao-financeira-integrada.dev.localhost:17015;http://prj-gestao-financeira-integrada.dev.localhost:15183",
       "environmentVariables": {
+        "DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS": "true",
+        "RUNNING_IN_DEVCONTAINER": "true",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ENVIRONMENT": "Development",
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21209",

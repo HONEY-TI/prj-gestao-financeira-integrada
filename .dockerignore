@@ -1,17 +1,22 @@
+
+# Dependências e builds
+**/node_modules/
 **/bin/
 **/obj/
-**/node_modules/
 **/dist/
-**/coverage
+**/build/
+**/coverage/
 **/.angular/
-**/TestResults
-**/*.user
-**/*.suo
-**/core
-**/core.*
-**/*.log
-**/packages
-**/.vs
-**/.idea
+**/TestResults/
+**/packages/
+
 **/.DS_Store
 **/Thumbs.db
+**/core
+**/core.*
+
+# Outros arquivos
+**/__pycache__/
+**/*.pyc
+**/tmp/
+**/temp/

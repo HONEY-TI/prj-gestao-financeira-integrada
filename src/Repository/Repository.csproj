@@ -16,12 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\.editorconfig" Link=".editorconfig">
-			<DependentUpon>$(MSBuildProjectDirectory)</DependentUpon>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Domain\Domain.csproj" />
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>

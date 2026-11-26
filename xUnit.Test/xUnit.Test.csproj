@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aspire.Hosting.Testing" Version="13.6.4" />
+		<PackageReference Include="Aspire.Hosting.Testing" Version="13.6.5" />
 		<PackageReference Include="Bogus" Version="35.6.5" />
 
 		<PackageReference Include="coverlet.collector" Version="10.1.0">
@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Server\Server.csproj" />
+		<ProjectReference Include="..\AppServer\AppServer.csproj" />
 		<ProjectReference Include="..\src\Application\Application.csproj" />
 		<ProjectReference Include="..\src\CrossCutting\CrossCutting.csproj" />
 		<ProjectReference Include="..\src\Domain\Domain.csproj" />

@@ -28,7 +28,7 @@ public static class HealthCheckDependencyInject
             });
 
         // HealthChecks de bancos de dados
-        healthCheckConfig?.Endpoints?
+        /*healthCheckConfig?.Endpoints?
             .Where(e => e.Port == 3306)
             .ToList()
             .ForEach(e =>
@@ -36,7 +36,7 @@ public static class HealthCheckDependencyInject
                 var connectionString = $"Server={e.EndPoint};Port={e.Port};Database={e.Database};Uid={e.User};Pwd={e.Password};";
                 healthChecksBuilder.AddMySql(connectionString, name: e.Name ?? e.EndPoint);
             });
-
+        */
         // -------------------- Health Checks UI --------------------
         builder.Services.AddHealthChecksUI().AddInMemoryStorage();
 

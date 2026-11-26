@@ -1,4 +1,5 @@
-﻿using Infrastructure.DatabaseContexts;
+﻿
+using Infrastructure.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,116 +11,110 @@ namespace Infrastructure.CommonInjectDependence;
 
 public static class SqlServicesInjectDependence
 {
-
-    public static IServiceCollection ConfigureMsSqlServerContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureMsSqlServerContext(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         var provider = DatabaseProvider.SqlServer;
-        services.AddSingleton(typeof(DatabaseProvider), provider);
 
-        services.AddScoped<RegisterContext>(sp =>
-        {
-            var options = sp.GetRequiredService<DbContextOptions<RegisterContext>>();
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            return new RegisterContext(options, provider, loggerFactory);
-        });
+        var connectionString =
+            configuration.GetConnectionString("SqlServerConnectionString")
+            ?? configuration.GetConnectionString("SqlConnectionString")
+            ?? throw new InvalidOperationException(
+                "Connection string 'SqlServerConnectionString' não encontrada.");
 
-        string connectionString = configuration.GetConnectionString("SqlServerConnectionString")
-           ?? configuration.GetConnectionString("SqlConnectionString")
-           ?? throw new Exception("Connection string 'SqlConnectionString' não encontrada no appsettings.json.");
-
-        services.AddDbContext<RegisterContext>((sp, options) =>
-        {
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            options.UseSqlServer(
-                connectionString,
-                b => b.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name));
-            options.UseLoggerFactory(loggerFactory);
-            options.UseLazyLoadingProxies();
-        });
-
-        return services;
+        return ConfigureContext(
+            services,
+            connectionString,
+            provider,
+            (options, connection) =>
+                options.UseSqlServer(
+                    connection,
+                    b => b.MigrationsAssembly(
+                        Assembly.GetExecutingAssembly().GetName().Name)));
     }
 
-    public static IServiceCollection ConfigureMySqlServerContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureMySqlServerContext(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("MySqlConnectionString")
-           ?? configuration.GetConnectionString("SqlConnectionString")
-           ?? throw new Exception("Connection string 'SqlConnectionString' não encontrada no appsettings.json.");
-
-        services.AddDbContext<RegisterContext>((sp, options) =>
-        {
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            options.UseMySql(
-                    connectionString,
-                    ServerVersion.AutoDetect(connectionString),
-                    b => b.MigrationsAssembly("Migrations.MySqlServer"));
-            options.UseLoggerFactory(loggerFactory);
-            options.UseLazyLoadingProxies();
-        });
-
         var provider = DatabaseProvider.MySql;
-        services.AddSingleton(typeof(DatabaseProvider), provider);
 
-        services.AddScoped<RegisterContext>(sp =>
-        {
-            var options = sp.GetRequiredService<DbContextOptions<RegisterContext>>();
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            return new RegisterContext(options, provider, loggerFactory);
-        });
+        var connectionString =
+            configuration.GetConnectionString("MySqlConnectionString")
+            ?? configuration.GetConnectionString("SqlConnectionString")
+            ?? throw new InvalidOperationException(
+                "Connection string 'MySqlConnectionString' não encontrada.");
 
-        return services;
+        return ConfigureContext(
+            services,
+            connectionString,
+            provider,
+            (options, connection) =>
+                options.UseMySQL(
+                    connection,
+                    b => b.MigrationsAssembly("Migrations.MySqlServer")));
     }
 
-    public static IServiceCollection ConfigureOracleServerContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureOracleServerContext(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("OracleConnectionString")
-           ?? configuration.GetConnectionString("SqlConnectionString")
-           ?? throw new Exception("Connection string 'SqlConnectionString' não encontrada no appsettings.json.");
-
-        services.AddDbContext<RegisterContext>((sp, options) =>
-        {
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            options.UseOracle(
-                connectionString,
-                b => b.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name));
-            options.UseLoggerFactory(loggerFactory);
-            options.UseLazyLoadingProxies();
-        });
-
         var provider = DatabaseProvider.Oracle;
-        services.AddSingleton(typeof(DatabaseProvider), provider);
 
-        services.AddScoped<RegisterContext>(sp =>
-        {
-            var options = sp.GetRequiredService<DbContextOptions<RegisterContext>>();
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            return new RegisterContext(options, provider, loggerFactory);
-        });
+        var connectionString =
+            configuration.GetConnectionString("OracleConnectionString")
+            ?? configuration.GetConnectionString("SqlConnectionString")
+            ?? throw new InvalidOperationException(
+                "Connection string 'OracleConnectionString' não encontrada.");
 
-        return services;
+        return ConfigureContext(
+            services,
+            connectionString,
+            provider,
+            (options, connection) =>
+                options.UseOracle(
+                    connection,
+                    b => b.MigrationsAssembly(
+                        Assembly.GetExecutingAssembly().GetName().Name)));
     }
 
     public static IServiceCollection ConfigureInMemoryServerContext(
-    this IServiceCollection services,
-    IConfiguration configuration)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
+        var provider = DatabaseProvider.InMemory;
+
+        services.Add(new ServiceDescriptor(typeof(DatabaseProvider), provider));
+
         services.AddDbContext<RegisterContext>((sp, options) =>
         {
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+
             options.UseInMemoryDatabase("RegisterDbInMemory")
-                .UseLoggerFactory(loggerFactory)
-                .UseLazyLoadingProxies();
-        });                 
+                   .UseLoggerFactory(loggerFactory)
+                   .UseLazyLoadingProxies();
+        });
 
-        var provider = DatabaseProvider.InMemory;
+        return services;
+    }
 
-        services.AddSingleton(typeof(DatabaseProvider), provider);
+    private static IServiceCollection ConfigureContext(
+        IServiceCollection services,
+        string connectionString,
+        DatabaseProvider provider,
+        Action<DbContextOptionsBuilder, string> configureDatabase)
+    {
+        services.Add(new ServiceDescriptor(typeof(DatabaseProvider), provider));
 
-        services.AddScoped<RegisterContext>(sp =>
+        services.AddDbContext<RegisterContext>((sp, options) =>
         {
-            var options = sp.GetRequiredService<DbContextOptions<RegisterContext>>();
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            return new RegisterContext(options, provider, loggerFactory);
+
+            configureDatabase(options, connectionString);
+
+            options.UseLoggerFactory(loggerFactory);
+            options.UseLazyLoadingProxies();
         });
 
         return services;
