@@ -1,14 +1,15 @@
-using Microsoft.Extensions.DependencyInjection;
 using AppHost.resources;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var cache = builder.AddRedis("cache");
+//var cache = builder.AddRedis("cache");
+var cache = builder.AddRedisCache("cache",
+    new ExternalRedisSettings(ConnectionString: "redis-cache:6379,abortConnect=false"),
+    useExternalByDefault: true);
 
 var server = builder
     .AddProject<Projects.AppServer>("server")
     .WithReference(cache)
-    .WaitFor(cache)
     .WithExternalHttpEndpoints();
 
 // Health / Swagger resources
