@@ -15,8 +15,8 @@ namespace AppHost.resources;
 /// <param name="InsightHealthUrl">URL usada pelo AppHost (dentro do devcontainer) para testar o RedisInsight.</param>
 internal sealed record ExternalRedisSettings(
     string? ConnectionString = null,
-    string RedisUrl = "redis://localhost:6379",
-    string? InsightUrl = "http://localhost:5540",
+    string RedisUrl = "redis://127.0.0.1:6379",
+    string? InsightUrl = "http://127.0.0.1:5540",
     string InsightHealthUrl = "http://redis-insight:5540");
 
 internal static class RedisResources
