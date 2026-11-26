@@ -22,7 +22,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
-		<PackageReference Include="MySql.Data" Version="9.4.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -37,11 +36,5 @@
 		</ProjectReference>
 		<ProjectReference Include="..\..\src\Repository\Repository.csproj" />
 		<ProjectReference Include="..\DataSeeders\Migrations.DataSeeders.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\.editorconfig" Link=".editorconfig">
-			<DependentUpon>$(MSBuildProjectDirectory)</DependentUpon>
-		</None>
 	</ItemGroup>
 </Project>
