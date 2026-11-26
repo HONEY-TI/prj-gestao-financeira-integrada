@@ -4,12 +4,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 //var cache = builder.AddRedis("cache");
 var cache = builder.AddRedisCache("cache",
-    new ExternalRedisSettings(ConnectionString: "redis-cache:6379,abortConnect=false"),
+    new ExternalRedisSettings(ConnectionString: "redis://default:redis@redis-cache:6379"),
     useExternalByDefault: true);
 
 var server = builder
     .AddProject<Projects.AppServer>("server")
     .WithReference(cache)
+    .WaitFor(cache)
     .WithExternalHttpEndpoints();
 
 // Health / Swagger resources
