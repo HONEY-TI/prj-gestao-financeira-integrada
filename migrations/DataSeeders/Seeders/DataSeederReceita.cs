@@ -30,59 +30,54 @@ public class DataSeederReceita : ISeeder
 
     private void SeedInternal(bool isInsert, int anoDados)
     {
-        var user = _context.Usuario.FirstOrDefault(u => u.Nome.Contains("Teste"));
-        if (user == null) return;
-
-        var categorias = _context.Categoria
-             .Where(c => c.UsuarioId == user.Id)
-             .ToList()
-             .GroupBy(c => c.Descricao)
-             .ToDictionary(g => g.Key, g => g.First().Id);
-
-        if (categorias.Count == 0)
-            return;
-
-        var receitasBase = new List<(string Descricao, string Categoria, decimal Valor)>
+        foreach (var user in _context.Usuario.ToList())
         {
-            ("Salário", "Salário", 2000m),
-            ("Investimento Bitcoin", "Investimento", 1000m),
-            ("Benefício casa alugada", "Benefício", 300m),
-            ("Outros ganhos", "Outros", 150m),
-            ("Freelance", "Outros", 500m)
-        };
+            var categorias = _context.Categoria
+                .Where(c => c.UsuarioId == user.Id
+                    && c.TipoCategoriaId == (int)Domain.Core.ValueObject.TipoCategoria.CategoriaType.Receita)
+                .ToList()
+                .GroupBy(c => c.Descricao)
+                .ToDictionary(g => g.Key, g => g.First().Id);
 
-        var startDate = new DateTime(anoDados, 1, 1);
-        var endDate = new DateTime(anoDados, 12, 31);
+            if (categorias.Count == 0)
+                continue;
 
-        var receitas = GenerateReceitas(user, categorias, receitasBase, startDate, endDate);
-
-        foreach (var receita in receitas)
-        {
-            if (isInsert)
+            var receitasBase = new List<(string Descricao, string Categoria, decimal Valor)>
             {
-                _context.Add(receita);
-            }
-            else
-            {
-                var existing = _context.Receita.FirstOrDefault(r =>
-                    r.Descricao == receita.Descricao &&
-                    r.UsuarioId == receita.UsuarioId &&
-                    r.Data == receita.Data);
+                ("Salário", "Salário", 2000m),
+                ("Investimento Bitcoin", "Investimento", 1000m),
+                ("Benefício casa alugada", "Benefício", 300m),
+                ("Outros ganhos", "Outros", 150m),
+                ("Freelance", "Outros", 500m)
+            };
 
-                if (existing != null)
-                {
-                    decimal randon= Random.Shared.Next(100, 4501) + (decimal)Random.Shared.NextDouble();
-                    receita.Valor = Math.Round(randon, 2);
-                    existing.Valor = receita.Valor;
-                }
-                else
+            var startDate = new DateTime(anoDados, 1, 1);
+            var endDate = new DateTime(anoDados, 12, 31);
+
+            var receitas = GenerateReceitas(user, categorias, receitasBase, startDate, endDate);
+
+            foreach (var receita in receitas)
+            {
+                if (isInsert)
                 {
                     _context.Add(receita);
                 }
-            }
-        }
+                else
+                {
+                    var existing = _context.Receita.FirstOrDefault(r =>
+                        r.Descricao == receita.Descricao &&
+                        r.UsuarioId == receita.UsuarioId &&
+                        r.Data == receita.Data);
 
-        _context.SaveChanges();
+                    if (existing != null)
+                        existing.Valor = receita.Valor;
+                    else
+                        _context.Add(receita);
+                }
+            }
+
+            _context.SaveChanges();
+        }
     }
 
     private List<Receita> GenerateReceitas(
