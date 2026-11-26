@@ -8,10 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</Content>
+	  <Compile Remove=".docker_scipts_backup_restore\**" />
+	  <EmbeddedResource Remove=".docker_scipts_backup_restore\**" />
+	  <None Remove=".docker_scipts_backup_restore\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,15 +33,5 @@
 		<ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\..\src\Repository\Repository.csproj" />
 		<ProjectReference Include="..\DataSeeders\Migrations.DataSeeders.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include=".docker_scipts_backup_restore\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\.editorconfig" Link=".editorconfig">
-			<DependentUpon>$(MSBuildProjectDirectory)</DependentUpon>
-		</None>
 	</ItemGroup>
 </Project>
