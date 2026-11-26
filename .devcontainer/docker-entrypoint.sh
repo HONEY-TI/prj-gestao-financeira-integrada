@@ -68,9 +68,9 @@ if ! git config --system --get-all safe.directory | grep -qxF "$PROJECT_WORKSPAC
 fi
 
 # Identidade gravada no home do usuário da aplicação, não no /root.
-GITCONFIG="$HOME_DIR/.gitconfig"
-git config --file "$GITCONFIG" user.name  "Alex Ribeiro de Faria"
-git config --file "$GITCONFIG" user.email "135660435+alexribeirofaria@users.noreply.github.com"
+
+git config --glocal user.name  "Alex Ribeiro de Faria"
+git config --glocal user.email "135660435+alexribeirofaria@users.noreply.github.com"
 chown "$APP_USER:$APP_GROUP" "$GITCONFIG"
 # ==========================================
 # NPM CONFIG
@@ -111,6 +111,10 @@ if [ -S "$DOCKER_SOCK" ]; then
 else
     echo "[entrypoint] $DOCKER_SOCK não encontrado"
 fi
+
+chown -R "$APP_USER:$APP_GROUP" "$PROJECT_WORKSPACE" 2>/dev/null || true
+chown -R "$APP_USER:$APP_GROUP" "/opt/dotnet-tools/.store/aspire.cli/17.0.0" 2>/dev/null || true
+
 # ==========================================
 # EXECUÇÃO
 # ==========================================
