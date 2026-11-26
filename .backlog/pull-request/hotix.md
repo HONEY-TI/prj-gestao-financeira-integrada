@@ -26,9 +26,9 @@ Feature relacionada: `.backlog/features/feature-02-hotix.md`
 | --- | --- |
 | 🌿 Branch de origem | `feature/hotix` |
 | 🎯 Branch de destino | `develop` |
-| 📝 Total de commits | 21 de conteúdo (22 incluindo o commit inicial) |
+| 📝 Total de commits | 24 de conteúdo (25 incluindo o commit inicial) |
 | 📁 Arquivos alterados | 21 |
-| ➕ Linhas adicionadas | 871 |
+| ➕ Linhas adicionadas | 928 |
 | ➖ Linhas removidas | 165 |
 
 ---
@@ -50,6 +50,9 @@ Feature relacionada: `.backlog/features/feature-02-hotix.md`
 
 ## 📝 Commits
 
+- docs(backlog): detalhar título e corpo do hotfix `.backlog/pull-request/hotix.md` - 012c970
+- docs(backlog): marcar PR hotix como aberta `.backlog/pull-request/hotix.md` - a9578f5
+- docs(backlog): atualizar métricas da PR hotix `.backlog/pull-request/hotix.md` - 82f81da
 - feat(redis): implementar recursos Redis externo e gerenciado `AppHost/resources/RedisResources.cs` - 342d995
 - chore(docker): adicionar regras locais de contexto `.docker/.dockerignore` - ac68dc3
 - feat(devcontainer): adicionar inicialização do shell `.devcontainer/setup/setup-shell.sh` - 081379a
