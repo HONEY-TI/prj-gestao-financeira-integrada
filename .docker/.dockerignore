@@ -1,0 +1,41 @@
+
+# Dependências e builds
+**/node_modules/
+**/bin/
+**/obj/
+**/dist/
+**/build/
+**/coverage/
+**/.angular/
+**/TestResults/
+**/packages/
+
+# Controle de versão
+.git/
+.gitignore
+
+# IDEs
+**/.vs/
+**/.idea/
+**/.vscode/
+
+# Arquivos temporários
+**/*.user
+**/*.suo
+**/*.log
+**/*.bak
+**/.DS_Store
+**/Thumbs.db
+**/core
+**/core.*
+
+# Configurações locais
+**/.env
+**/.env.*
+!**/.env.example
+
+# Outros arquivos
+**/__pycache__/
+**/*.pyc
+**/tmp/
+**/temp/
