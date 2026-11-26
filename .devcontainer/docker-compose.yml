@@ -19,10 +19,45 @@ services:
       DOTNET_GCHeapHardLimitPercent: "50"
       UV_THREADPOOL_SIZE: "6"    
     volumes:
-      - ../:/workspace:delegated
+      - ../:/workspace:cached
       - vscode-extensions-shared-dotnet:/home/ubuntu/.vscode-server/extensions:cached
       - dotnet-node-modules:/workspace/frontend/node_modules:cached 
-      - shell_history-shared:/home/ubuntu/shell_history:cached 
+      - shell_history-shared-dotnet:/home/ubuntu/shell_history:cached 
+      - vsc-nuget-packages:/home/ubuntu/.nuget/packages:cached
+      - vsc-aspire-home:/home/ubuntu/.aspire:cached
+      - vsc-apphost-bin:/workspace/AppHost/bin:cached
+      - vsc-apphost-obj:/workspace/AppHost/obj:cached
+      - vsc-appserver-bin:/workspace/AppServer/bin:cached
+      - vsc-appserver-obj:/workspace/AppServer/obj:cached
+      - vsc-frontend-bin:/workspace/frontend/bin:cached
+      - vsc-frontend-obj:/workspace/frontend/obj:cached
+      - vsc-frontend-angular:/workspace/frontend/.angular:cached
+      - vsc-dataseeders-bin:/workspace/migrations/DataSeeders/bin:cached
+      - vsc-dataseeders-obj:/workspace/migrations/DataSeeders/obj:cached
+      - vsc-mssqlserver-bin:/workspace/migrations/MsSqlServer/bin:cached
+      - vsc-mssqlserver-obj:/workspace/migrations/MsSqlServer/obj:cached
+      - vsc-mysqlserver-bin:/workspace/migrations/MySqlServer/bin:cached
+      - vsc-mysqlserver-obj:/workspace/migrations/MySqlServer/obj:cached
+      - vsc-oracle-bin:/workspace/migrations/Oracle/bin:cached
+      - vsc-oracle-obj:/workspace/migrations/Oracle/obj:cached
+      - vsc-application-bin:/workspace/src/Application/bin:cached
+      - vsc-application-obj:/workspace/src/Application/obj:cached
+      - vsc-crosscutting-bin:/workspace/src/CrossCutting/bin:cached
+      - vsc-crosscutting-obj:/workspace/src/CrossCutting/obj:cached
+      - vsc-domain-bin:/workspace/src/Domain/bin:cached
+      - vsc-domain-obj:/workspace/src/Domain/obj:cached
+      - vsc-globalexception-bin:/workspace/src/GlobalException/bin:cached
+      - vsc-globalexception-obj:/workspace/src/GlobalException/obj:cached
+      - vsc-infrastructure-bin:/workspace/src/Infrastructure/bin:cached
+      - vsc-infrastructure-obj:/workspace/src/Infrastructure/obj:cached
+      - vsc-repository-bin:/workspace/src/Repository/bin:cached
+      - vsc-repository-obj:/workspace/src/Repository/obj:cached
+      - vsc-repository-mapping-bin:/workspace/src/Repository.Mapping/bin:cached
+      - vsc-repository-mapping-obj:/workspace/src/Repository.Mapping/obj:cached
+      - vsc-xunit-test-bin:/workspace/xUnit.Test/bin:cached
+      - vsc-xunit-test-obj:/workspace/xUnit.Test/obj:cached
+    tmpfs: 
+      - /workspace/frontend/dist
     ports:
       - "17016:17015"
       - "7310:7309"
@@ -68,11 +103,80 @@ volumes:
     external: true
   dotnet-node-modules:
     external: true
-  shell_history-shared:
+  shell_history-shared-dotnet:
     external: true
+  vsc-aspire-home:
+    name: vsc-aspire-home    
+  vsc-nuget-packages:
+    name: vsc-nuget-packages
+  vsc-apphost-bin:
+    name: vsc-apphost-bin
+  vsc-apphost-obj:
+    name: vsc-apphost-obj
+  vsc-appserver-bin:
+    name: vsc-appserver-bin
+  vsc-appserver-obj:
+    name: vsc-appserver-obj
+  vsc-frontend-bin:
+    name: vsc-frontend-bin
+  vsc-frontend-obj:
+    name: vsc-frontend-obj
+  vsc-frontend-angular:
+    name: vsc-frontend-angular
+  vsc-dataseeders-bin:
+    name: vsc-dataseeders-bin
+  vsc-dataseeders-obj:
+    name: vsc-dataseeders-obj
+  vsc-mssqlserver-bin:
+    name: vsc-mssqlserver-bin
+  vsc-mssqlserver-obj:
+    name: vsc-mssqlserver-obj
+  vsc-mysqlserver-bin:
+    name: vsc-mysqlserver-bin
+  vsc-mysqlserver-obj:
+    name: vsc-mysqlserver-obj
+  vsc-oracle-bin:
+    name: vsc-oracle-bin
+  vsc-oracle-obj:
+    name: vsc-oracle-obj
+  vsc-application-bin:
+    name: vsc-application-bin
+  vsc-application-obj:
+    name: vsc-application-obj
+  vsc-crosscutting-bin:
+    name: vsc-crosscutting-bin
+  vsc-crosscutting-obj:
+    name: vsc-crosscutting-obj
+  vsc-domain-bin:
+    name: vsc-domain-bin
+  vsc-domain-obj:
+    name: vsc-domain-obj
+  vsc-globalexception-bin:
+    name: vsc-globalexception-bin
+  vsc-globalexception-obj:
+    name: vsc-globalexception-obj
+  vsc-infrastructure-bin:
+    name: vsc-infrastructure-bin
+  vsc-infrastructure-obj:
+    name: vsc-infrastructure-obj
+  vsc-repository-bin:
+    name: vsc-repository-bin
+  vsc-repository-obj:
+    name: vsc-repository-obj
+  vsc-repository-mapping-bin:
+    name: vsc-repository-mapping-bin
+  vsc-repository-mapping-obj:
+    name: vsc-repository-mapping-obj
+  vsc-xunit-test-bin:
+    name: vsc-xunit-test-bin
+  vsc-xunit-test-obj:
+    name: vsc-xunit-test-obj
+
 
 networks:
   dotnet-network:
     external: true
   redis-network:
     external: true
+  
+  
