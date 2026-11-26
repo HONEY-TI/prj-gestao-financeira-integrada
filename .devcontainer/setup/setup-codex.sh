@@ -181,6 +181,7 @@ open_browser() {
     local url="${DEVICE_URL:-https://auth.openai.com/codex/device}"
     local helper sock i    
     local published_code
+    env -u VSCODE_IPC_HOOK_CLI -u BROWSER bash -c 'H=$(/bin/ls -t ~/.vscode-server/bin/*/bin/helpers/browser.sh | head -n 1); for S in $(/bin/ls -t /tmp/vscode-ipc-*.sock); do echo "tentando $S"; VSCODE_IPC_HOOK_CLI="$S" timeout 15 "$H" "https://auth.openai.com/codex/device"; echo "exit=$?"; done'
 
     # espera até 30s o VS Code criar o socket IPC
     for ((i = 0; i < 30; i++)); do
@@ -229,7 +230,7 @@ open_browser() {
         VSCODE_IPC_HOOK_CLI="$sock" timeout 15 "$helper" "$url" >/dev/null 2>&1 </dev/null && return 0
     done < <(/bin/ls -t /tmp/vscode-ipc-*.sock 2>/dev/null || true)
     
-    env -u VSCODE_IPC_HOOK_CLI -u BROWSER bash -c 'H=$(/bin/ls -t ~/.vscode-server/bin/*/bin/helpers/browser.sh | head -n 1); for S in $(/bin/ls -t /tmp/vscode-ipc-*.sock); do echo "tentando $S"; VSCODE_IPC_HOOK_CLI="$S" timeout 10 "$H" "https://auth.openai.com/codex/device"; echo "exit=$?"; done'
+    
 }
 
 publish_device_auth() {
