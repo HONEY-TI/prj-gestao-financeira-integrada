@@ -1,7 +1,7 @@
 ---
 name: hotix
 pr: 2
-title: "PR(#2)-hotix"
+title: "PR(#2)-hotfix - corrigir ambiente e integração com Redis"
 branch: feature/hotix
 base: develop
 extends: feature-02-hotix
@@ -10,8 +10,8 @@ status: open
 
 ## 📋 Descrição
 
-Implementação da **hotix** via feature branch `feature/hotix`, com commits atômicos e
-semânticos por arquivo.
+Implementação do **hotfix - corrigir ambiente e integração com Redis** via feature branch
+`feature/hotix`, com commits atômicos e semânticos por arquivo.
 
 As alterações corrigem o ambiente Dev Container/Docker, configuram certificados TLS para o
 Redis e integram o AppHost/AppServer com Redis externo ou gerenciado pelo Aspire.
