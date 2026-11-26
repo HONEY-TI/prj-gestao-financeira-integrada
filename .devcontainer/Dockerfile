@@ -13,20 +13,19 @@ ENV DEBIAN_FRONTEND=noninteractive
 # =============================================================================
 # STEP 2 - Pacotes do sistema
 # =============================================================================
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+        apt-get install -y --no-install-recommends \
+        docker.io \
         xauth \
         wl-clipboard \
         xclip \
         xsel \
-        bubblewrap \
-        jq \
-        apt-utils \
-        libnss3-tools \
+        bubblewrap \        
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git lfs install --system
+#RUN dotnet workload update
+#RUN git lfs install --system
 
 # =============================================================================
 # STEP 3 - SSH
@@ -58,22 +57,20 @@ ENV PATH="/usr/local/bin/setup:${PATH}"
 # =============================================================================
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/bin/tools/tool-install.sh,  /usr/local/bin/setup/start.sh \
-    /usr/local/bin/open-user-shell.sh" \
+    /usr/local/bin/setup/setup-shell.sh" \
     > /etc/sudoers.d/${USERNAME}-dev \
     && chmod 0440 /etc/sudoers.d/${USERNAME}-dev
-
 # =========================================================
 # STEP 6 - DOTNET RUN — AUTO LAUNCH PROFILE
 # =========================================================
-
 RUN cat >> /home/${USERNAME}/.bashrc <<'EOF'
-
 function dotnet() {
     local cmd="$1"
     local project="$2"
     local PROFILE
 
     if [[ "$cmd" == "run" ]]; then
+
         case "$(uname -s)" in
             MINGW*|MSYS*|CYGWIN*|Windows_NT)
                 PROFILE="https"
@@ -87,15 +84,17 @@ function dotnet() {
                 ;;
         esac
 
-        [[ -z "$project" || "$project" == "AppHost" ]] && project="AppHost"
+        if [[ -z "$project" || "$project" == "AppHost" ]]; then
+            project="AppHost"
+        fi
 
         echo "Starting $project with profile: $PROFILE"
 
-        command dotnet restore 
         command dotnet run \
             --launch-profile "$PROFILE" \
             --project "$project" \
             "${@:3}"
+
     else
         command dotnet "$@"
     fi
@@ -104,7 +103,30 @@ EOF
 
 RUN chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc
 RUN sudo useradd -D -s /bin/bash
-RUN dotnet workload update
+
+
+# =============================================================================
+# 🔄 AUTO SWITCH — ROOT ➜ ubuntu
+# =============================================================================
+#  📌 false = DESATIVADO | true = ATIVADO
+#=============================================================================
+ARG ENABLE_SWITCH_USER=true
+ENV ENABLE_SWITCH_USER=${ENABLE_SWITCH_USER}
+
+RUN if [ "${ENABLE_SWITCH_USER}" = "true" ]; then \
+        echo "🔄 Configurando auto switch: root ➜ ubuntu"; \
+        printf '%s\n' \
+            'if [ "${AUTO_SWITCHED}" != "1" ]; then' \
+            '    export AUTO_SWITCHED=1' \
+            '    exec su --whitelist-environment=VSCODE_IPC_HOOK_CLI,REMOTE_CONTAINERS_IPC,BROWSER,GIT_ASKPASS,VSCODE_GIT_ASKPASS_NODE,VSCODE_GIT_ASKPASS_MAIN,VSCODE_GIT_IPC_HANDLE -l ubuntu' \
+            'fi' \
+            > /root/.switch_user; \
+        echo "source /root/.switch_user" >> /root/.bashrc; \
+        echo "source /root/.switch_user" >> /root/.bash_profile; \
+        echo ". /root/.switch_user" >> /root/.profile; \
+    else \
+        echo "⏭️  Auto switch root ➜ ubuntu: DESATIVADO"; \
+    fi    
 
 WORKDIR ${WORKSPACE}
 ENTRYPOINT ["docker-entrypoint.sh"]
