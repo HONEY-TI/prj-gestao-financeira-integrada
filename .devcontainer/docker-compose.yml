@@ -1,34 +1,26 @@
 #ssh -T github-alexfaria # ssh -T gitlab-alexfaria
 services:
   prj-gestao-integrada:
+    image: prj-gestao-integrada:cli
     container_name: prj-gestao-integrada
-    image: prj-gestao-integrada:latest
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-      "args": { "USERNAME": "ubuntu", "ENABLE_SWITCH_USER", "true" }
+      "args": { "USERNAME": "ubuntu", "ENABLE_SWITCH_USER", "true" }    
     secrets:
       - env      
-#    env_file:
-#      - .env
     environment:
       NODE_OPTIONS: "--max-old-space-size=4096"
       GITHUB_TOKEN: ${GITHUB_TOKEN:?GITHUB_TOKEN não definido no .env}
+      REDIS_HOST: ${REDIS_HOST:-redis-cache}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       XAUTHORITY: /tmp/.xauth-devc
       DOTNET_GCHeapHardLimitPercent: "50"
-      UV_THREADPOOL_SIZE: "6"
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 6G
-        reservations:
-          cpus: "2.0"
-          memory: 2G
-    memswap_limit: 6G
+      UV_THREADPOOL_SIZE: "6"    
     volumes:
-      - ../:/workspace:cached
-      - vscode-extensions-shared:/home/ubuntu/.vscode-server/extensions:cached
+      - ../:/workspace:delegated
+      - vscode-extensions-shared-dotnet:/home/ubuntu/.vscode-server/extensions:cached
       - dotnet-node-modules:/workspace/frontend/node_modules:cached 
       - shell_history-shared:/home/ubuntu/shell_history:cached 
     ports:
@@ -47,9 +39,20 @@ services:
       - apparmor=unconfined
       - seccomp:unconfined
     command: sleep infinity
+    tty: true
+    stdin_open: true
     networks:
       - dotnet-network
       - redis-network
+    deploy:
+      resources:
+        limits:
+          cpus: "3.0"
+          memory: 6G
+        reservations:
+          cpus: "2.0"
+          memory: 4G
+    memswap_limit: 8G
     logging:
       driver: json-file
       options:
@@ -61,7 +64,7 @@ secrets:
     file: .env
     
 volumes:
-  vscode-extensions-shared:
+  vscode-extensions-shared-dotnet:
     external: true
   dotnet-node-modules:
     external: true
