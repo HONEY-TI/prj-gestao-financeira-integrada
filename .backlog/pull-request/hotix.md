@@ -26,18 +26,18 @@ Feature relacionada: `.backlog/features/feature-02-hotix.md`
 | --- | --- |
 | 🌿 Branch de origem | `feature/hotix` |
 | 🎯 Branch de destino | `develop` |
-| 📝 Total de commits | 67 de conteúdo (68 incluindo o commit inicial) |
-| 📁 Arquivos alterados | 52 |
-| ➕ Linhas adicionadas | 1909 |
-| ➖ Linhas removidas | 4856 |
+| 📝 Total de commits | 69 de conteúdo (70 incluindo o commit inicial) |
+| 📁 Arquivos alterados | 53 |
+| ➕ Linhas adicionadas | 1952 |
+| ➖ Linhas removidas | 4945 |
 
 ---
 
 ## 📦 Repositórios/branches atualizados
 
 - **[HONEY-TI/prj-gestao-financeira-integrada](https://github.com/HONEY-TI/prj-gestao-financeira-integrada)** — branch [`feature/hotix`](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/tree/feature/hotix)
-  - Commits: 67 de conteúdo
-  - Arquivos alterados: 52
+  - Commits: 69 de conteúdo
+  - Arquivos alterados: 53
   - Commit publicado: [342d995](https://github.com/HONEY-TI/prj-gestao-financeira-integrada/commit/342d99542dc4bbb3dd8887d7707359c59097fb12)
 
 ## Checklist
@@ -50,6 +50,7 @@ Feature relacionada: `.backlog/features/feature-02-hotix.md`
 
 ## 📝 Commits
 
+- chore(frontend): remover artefato gerado `frontend/obj\\Debug/\\package.g.props` - d9dd643
 - feat(raiz): warn frontend `warn-frontend.md` - 6ff2b64
 - fix(.devcontainer/setup): setup codex.v1 `.devcontainer/setup/setup-codex.v1.sh` - 21a8e6f
 - test(xUnit.Test): xunit.test `xUnit.Test/xUnit.Test.csproj` - 2fac0d6
