@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
-using MySqlConnector;
 using Migrations.DataSeeders.Abstractions;
+using MySql.Data.MySqlClient;
 
 namespace Migrations.DataSeeders.Implementations;
 
