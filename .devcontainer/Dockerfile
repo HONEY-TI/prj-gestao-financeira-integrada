@@ -14,15 +14,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 # STEP 2 - Pacotes do sistema
 # =============================================================================
 RUN apt-get update && \
-        apt-get install -y --no-install-recommends \
-        docker.io \
+    apt-get install -y --no-install-recommends \
+        nano \
+        xterm \
         xauth \
+        docker.io \
         wl-clipboard \
         xclip \
         xsel \
-        bubblewrap \        
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        bubblewrap \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 #RUN dotnet workload update
 #RUN git lfs install --system
@@ -60,44 +63,56 @@ RUN echo "${USERNAME} ALL=(root) NOPASSWD: /usr/local/bin/tools/tool-install.sh,
     /usr/local/bin/setup/setup-shell.sh" \
     > /etc/sudoers.d/${USERNAME}-dev \
     && chmod 0440 /etc/sudoers.d/${USERNAME}-dev
+
 # =========================================================
 # STEP 6 - DOTNET RUN — AUTO LAUNCH PROFILE
 # =========================================================
 RUN cat >> /home/${USERNAME}/.bashrc <<'EOF'
 function dotnet() {
-    local cmd="$1"
-    local project="$2"
-    local PROFILE
+    # Qualquer comando diferente de "run" passa direto
+    if [[ "$1" != "run" ]]; then
+        command dotnet "$@"
+        return
+    fi
 
-    if [[ "$cmd" == "run" ]]; then
-
-        case "$(uname -s)" in
-            MINGW*|MSYS*|CYGWIN*|Windows_NT)
-                PROFILE="https"
-                ;;
-            Linux|Darwin)
-                PROFILE="https-container"
-                ;;
-            *)
-                echo "Unsupported operating system: $(uname -s)"
-                return 1
+    # Respeita quem já informou perfil ou projeto manualmente
+    local arg
+    for arg in "${@:2}"; do
+        case "$arg" in
+            --launch-profile|-lp|--project|--no-launch-profile)
+                command dotnet "$@"
+                return
                 ;;
         esac
+    done
 
-        if [[ -z "$project" || "$project" == "AppHost" ]]; then
-            project="AppHost"
-        fi
+    # Perfil conforme o sistema operacional
+    local profile
+    case "$(uname -s)" in
+        MINGW*|MSYS*|CYGWIN*|Windows_NT) profile="https" ;;
+        Linux|Darwin)                    profile="https-container" ;;
+        *)
+            echo "Unsupported operating system: $(uname -s)"
+            return 1
+            ;;
+    esac
 
-        echo "Starting $project with profile: $PROFILE"
+    shift  # remove "run"
 
-        command dotnet run \
-            --launch-profile "$PROFILE" \
-            --project "$project" \
-            "${@:3}"
-
-    else
-        command dotnet "$@"
+    # Projeto: argumento posicional > .csproj na pasta atual > ./AppHost
+    local project_args=()
+    if [[ -n "$1" && "$1" != -* ]]; then
+        project_args=(--project "$1")
+        shift
+    elif compgen -G "*.csproj" > /dev/null; then
+        :  # já está na pasta do projeto
+    elif [[ -d "AppHost" ]]; then
+        project_args=(--project "AppHost")
     fi
+
+    echo "Starting ${project_args[1]:-$(basename "$PWD")} with profile: $profile"
+
+    command dotnet run --launch-profile "$profile" "${project_args[@]}" "$@"
 }
 EOF
 
