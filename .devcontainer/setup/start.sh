@@ -8,9 +8,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PREREQS=()
 
 # Tarefas padrão (sem duplicar o que está em PREREQS)
+#setup-codex     
 DEFAULT_TASKS=(
-    setup-dev-certs
-    setup-codex    
+    setup-codex
+    setup-shell
 )
 
 log() {
@@ -63,6 +64,7 @@ main() {
     fi
 
     acquire_lock    
+
     # Não deixa falha de certificado derrubar o container
     aspire certs trust || log "⚠️ Falha ao confiar no certificado (seguindo)"
 
@@ -76,6 +78,7 @@ main() {
     for item in "${tasks[@]}"; do
         run_task "$item" || log "⚠️ Tarefa falhou, continuando: $item"
     done
+
 
     log "🎉 Post-start finalizado."
 }
