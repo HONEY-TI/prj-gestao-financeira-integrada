@@ -1,5 +1,12 @@
 # Normaliza todos os arquivos de texto para LF (no repositório e no working tree)
-* text=auto eol=lf
+* text=auto
+*.cs text eol=lf
+*.csproj text eol=lf
+*.sln text eol=lf
+*.json text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 
 # Arquivos que precisam de CRLF no Windows (únicas exceções)
 *.bat text eol=crlf
